@@ -1,4 +1,4 @@
-      double precision function prho(n, is, ifault)
+      real(8) function prho(n, is, ifault)
 c
 c        Algorithm AS 89   Appl. Statist. (1975) Vol.24, No. 3, P377.
 c       
@@ -8,14 +8,17 @@ c        must be greater than 1
 c
 c     Auxiliary function required: ALNORM = algorithm AS66
 c
-      dimension l(6)
-      double precision zero, one, two, b, x, y, z, u, six,
-     $  c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12
-      data zero, one, two, six /0.0d0, 1.0d0, 2.0d0, 6.0d0/
-      data        c1,     c2,     c3,     c4,     c5,     c6,
-     $          c7,     c8,     c9,    c10,    c11,    c12/
-     $  0.2274d0, 0.2531d0, 0.1745d0, 0.0758d0, 0.1033d0, 0.3932d0,
-     $  0.0879d0, 0.0151d0, 0.0072d0, 0.0831d0, 0.0131d0, 0.00046d0/
+      integer, intent(in) :: n, is
+      integer, intent(out) :: ifault
+      integer :: l(6)
+      double precision b, x, y, z, u
+      double precision, parameter :: zero = 0.0d0, one=1.0d0,
+     $    two=2.0d0, six=6.0d0
+      double precision, parameter :: c1=0.2274d0, c2 =0.2531d0,
+     $  c3 =0.1745d0, c4 =0.0758d0, c5 =0.1033d0, c6 =0.3932d0,
+     $  c7 =0.0879d0, c8 =0.0151d0, c9 =0.0072d0, c10=0.0831d0,
+     $  c11=0.0131d0, c12=0.00046d0
+      integer :: js
 c
 c        Test admissibility of arguments and initialize
 c
