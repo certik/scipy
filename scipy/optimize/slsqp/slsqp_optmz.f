@@ -585,7 +585,8 @@ C   END OF MAIN ITERATION
 
 C   END OF SLSQPB
 
-  330 END
+  330 CONTINUE
+      END
 
 
       SUBROUTINE lsq(m,meq,n,nl,la,l,g,a,b,xl,xu,x,y,w,jw,mode)
@@ -926,7 +927,8 @@ C  SOLUTION OF ORIGINAL PROBLEM AND LAGRANGE MULTIPLIERS
 
 C  END OF SUBROUTINE LSEI
 
-   75                                  END
+   75                                  CONTINUE
+                                       END
 
 
       SUBROUTINE lsi(e,f,g,h,LE,me,lg,mg,n,x,xnorm,w,jw,mode)
@@ -1005,7 +1007,8 @@ C  SOLUTION OF ORIGINAL PROBLEM
 
 C  END OF SUBROUTINE LSI
 
-   50                                    END
+   50                                    CONTINUE
+                                         END
 
       SUBROUTINE ldp(g,mg,m,n,h,x,xnorm,w,INDEX,mode)
 
@@ -1103,7 +1106,8 @@ C  COMPUTE LAGRANGE MULTIPLIERS FOR PRIMAL PROBLEM
 
 C  END OF SUBROUTINE LDP
 
-   50                               END
+   50                               CONTINUE
+                                    END
 
 
       SUBROUTINE nnls (a, mda, m, n, b, x, rnorm, w, z, INDEX, mode)
@@ -1299,7 +1303,8 @@ C STEP TWELVE (SOLUTION)
 
 C END OF SUBROUTINE NNLS
 
-  290                                 END
+  290                                 CONTINUE
+                                      END
 
       SUBROUTINE hfti(a,mda,m,n,b,mdb,nb,tau,krank,rnorm,h,g,ip)
 
@@ -1508,7 +1513,8 @@ C     ****** APPLY THE TRANSFORMATION  I+U*(U**T)/B  TO C ******
               c(i4)=c(i4)+sm*u(1,i)
    60         i4=i4+ice
    70     CONTINUE
-   80                                             END
+   80                                             CONTINUE
+                                                  END
 
       SUBROUTINE ldl (n,a,z,sigma,w)
 C   LDL     LDL' - RANK-ONE - UPDATE
