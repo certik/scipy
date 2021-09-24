@@ -2003,7 +2003,16 @@ C     DATA CUTLO, CUTHI / 4.441E-16,  1.304E19 /
       nn = n * incx
 C                       BEGIN MAIN LOOP
       i = 1
-   20    GO TO next,(30, 50, 70, 110)
+   20 CONTINUE
+      IF (next == 30) then
+          GO TO 30
+      ELSEIF (next == 50) then
+          GO TO 50
+      ELSEIF (next == 70) then
+          GO TO 70
+      ELSEIF (next == 110) then
+          GO TO 110
+      ENDIF
    30 IF( ABS(dx(i)) .GT. cutlo) GO TO 85
       assign 50 to next
       xmax = ZERO
