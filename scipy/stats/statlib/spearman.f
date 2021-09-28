@@ -1,3 +1,7 @@
+      module X
+
+      contains
+
       real(8) function prho(n, is, ifault)
 c
 c        Algorithm AS 89   Appl. Statist. (1975) Vol.24, No. 3, P377.
@@ -81,3 +85,5 @@ c
       if (prho .gt. one) prho = one
       return
       end
+
+      end module
