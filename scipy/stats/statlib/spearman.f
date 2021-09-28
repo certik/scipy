@@ -2,6 +2,12 @@
 
       contains
 
+      real(dp) function alnorm(X, b)
+      real(dp), intent(in) :: X
+      logical, intent(in) :: b
+      alnorm = 1.0
+      end function
+
       real(8) function prho(n, is, ifault)
 c
 c        Algorithm AS 89   Appl. Statist. (1975) Vol.24, No. 3, P377.
