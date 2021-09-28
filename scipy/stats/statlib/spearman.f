@@ -31,6 +31,7 @@ c
      $  c7 =0.0879d0, c8 =0.0151d0, c9 =0.0072d0, c10=0.0831d0,
      $  c11=0.0131d0, c12=0.00046d0
       integer :: js, nfac, i, ifr, m, ise, n1, mt, nn
+      integer :: goto
 c
 c        Test admissibility of arguments and initialize
 c
@@ -43,7 +44,7 @@ c
       if (is .gt. n * (n * n -1) / 3) return
       js = is
       if (js .ne. 2 * (js / 2)) js = js + 1
-      if (n .gt. 6) goto 6
+      if (n .gt. 6) goto=6
 c
 c        Exact evaluation of probability
 c
@@ -68,9 +69,9 @@ c
           l(i) = l(i + 1)
     4   continue
         l(n1) = mt
-        if (l(n1) .ne. n1 .or. n1 .eq. 2) goto 5
+        if (l(n1) .ne. n1 .or. n1 .eq. 2) goto=5
         n1 = n1 - 1
-        if (m .ne. nfac) goto 3
+        if (m .ne. nfac) goto=3
     5 continue
       prho = real(ifr,dp) / real(nfac,dp)
       return
