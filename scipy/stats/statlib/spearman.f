@@ -1,5 +1,7 @@
       module X
 
+      integer, parameter :: dp = kind(0.d0)
+
       contains
 
       real(dp) function alnorm(X, b)
@@ -21,7 +23,6 @@ c
       integer, intent(in) :: n, is
       integer, intent(out) :: ifault
       integer :: l(6)
-      integer, parameter :: dp = kind(0.d0)
       double precision b, x, y, z, u
       double precision, parameter :: zero = 0.0d0, one=1.0d0,
      $    two=2.0d0, six=6.0d0
