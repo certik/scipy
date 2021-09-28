@@ -30,7 +30,7 @@ c
      $  c3 =0.1745d0, c4 =0.0758d0, c5 =0.1033d0, c6 =0.3932d0,
      $  c7 =0.0879d0, c8 =0.0151d0, c9 =0.0072d0, c10=0.0831d0,
      $  c11=0.0131d0, c12=0.00046d0
-      integer :: js, nfac, i
+      integer :: js, nfac, i, ifr, m, ise, n1, mt, nn
 c
 c        Test admissibility of arguments and initialize
 c
