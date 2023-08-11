@@ -9857,7 +9857,7 @@ C
               GDI=GER-HEI/RT
               RT=RT-HEI/GDI
            ENDIF
-           IF (DABS(RT-RT0(KD)).GT.5.0D-10) THEN
+           IF (DABS(RT-RT0(KD)).GT.5.0D-8) THEN
               RT0(KD)=RT
               GO TO 10
            ENDIF
