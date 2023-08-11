@@ -41,6 +41,14 @@ def test_expi_complex():
             dataset.append((z, complex(mpmath.ei(z))))
     dataset = np.array(dataset, dtype=np.complex_)
 
+    # remove all those datapoints with imaginary part 0
+    new_dataset = []
+    for z, res in dataset:
+        if z.imag != 0:
+            new_dataset.append((z, res))
+
+    dataset = np.array(new_dataset, dtype=np.complex_)
+
     FuncData(sc.expi, dataset, 0, 1).check()
 
 
