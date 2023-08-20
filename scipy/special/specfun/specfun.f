@@ -9185,7 +9185,7 @@ C
 60            CONTINUE
 65         R=-0.25D0*X*X2
            GS=1.5D0
-           HER=1.5D0*R-BER/X-(DLOG(X/2.D0)+EL)*DER+0.25*PI*DEI
+           HER=1.5D0*R-BER/X-(DLOG(X/2.D0)+EL)*DER+0.25d0*PI*DEI
            DO 70 M=1,60
               R=-0.25D0*R/M/(M+1.0D0)/(2.0D0*M+1.0D0)**2*X4
               GS=GS+1.0D0/(2*M+1.0D0)+1.0D0/(2*M+2.0D0)
@@ -9194,7 +9194,7 @@ C
 70         CONTINUE
 75         R=0.5D0*X
            GS=1.0D0
-           HEI=0.5D0*X-BEI/X-(DLOG(X/2.D0)+EL)*DEI-0.25*PI*DER
+           HEI=0.5D0*X-BEI/X-(DLOG(X/2.D0)+EL)*DEI-0.25d0*PI*DER
            DO 80 M=1,60
               R=-0.25D0*R/(M*M)/(2*M-1.0D0)/(2*M+1.0D0)*X4
               GS=GS+1.0D0/(2.0D0*M)+1.0D0/(2*M+1.0D0)
@@ -9825,14 +9825,14 @@ C       ====================================================
 C
         IMPLICIT DOUBLE PRECISION (A-H,O-Z)
         DIMENSION ZO(NT),RT0(8)
-        RT0(1)=2.84891
-        RT0(2)=5.02622
-        RT0(3)=1.71854
-        RT0(4)=3.91467
-        RT0(5)=6.03871
-        RT0(6)=3.77268
-        RT0(7)=2.66584
-        RT0(8)=4.93181
+        RT0(1)=2.84891d0
+        RT0(2)=5.02622d0
+        RT0(3)=1.71854d0
+        RT0(4)=3.91467d0
+        RT0(5)=6.03871d0
+        RT0(6)=3.77268d0
+        RT0(7)=2.66584d0
+        RT0(8)=4.93181d0
         RT=RT0(KD)
         DO 15 M=1,NT
 10         CALL KLVNA(RT,BER,BEI,GER,GEI,DER,DEI,HER,HEI)
@@ -9857,7 +9857,7 @@ C
               GDI=GER-HEI/RT
               RT=RT-HEI/GDI
            ENDIF
-           IF (DABS(RT-RT0(KD)).GT.5.0D-10) THEN
+           IF (DABS(RT-RT0(KD)).GT.5.0D-8) THEN
               RT0(KD)=RT
               GO TO 10
            ENDIF
