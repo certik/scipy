@@ -4382,7 +4382,7 @@ C             (2) DVLA for computing Dv(x) for large |x|
 C       ====================================================
 C
         IMPLICIT DOUBLE PRECISION (A-H,O-Z)
-        DIMENSION DV(0:*),DP(0:*)
+        DIMENSION DV(0:100),DP(0:100)
         XA=DABS(X)
         VH=V
         V=V+DSIGN(1.0D0,V)
@@ -7978,7 +7978,7 @@ C       ==================================================
 C
         IMPLICIT DOUBLE PRECISION (A-B,D-H,O-Y)
         IMPLICIT COMPLEX*16 (C,Z)
-        DIMENSION CPB(0:*),CPD(0:*)
+        DIMENSION CPB(0:100),CPD(0:100)
         PI=3.141592653589793D0
         X=DBLE(Z)
         A0=ABS(Z)
@@ -11431,7 +11431,7 @@ C             (2) VVLA for computing Vv(x) for large |x|
 C       ===================================================
 C
         IMPLICIT DOUBLE PRECISION (A-H,O-Z)
-        DIMENSION VV(0:*),VP(0:*)
+        DIMENSION VV(0:100),VP(0:100)
         PI=3.141592653589793D0
         XA=DABS(X)
         VH=V
