@@ -7544,7 +7544,7 @@ C
         ENDIF
         X0=X
         NA=0
-        IF (X.LE.7.0) THEN
+        IF (X.LE.7.0D0) THEN
            NA=INT(7-X)
            X0=X+NA
         ENDIF
@@ -7556,7 +7556,7 @@ C
            T=Z1**(1-2*K)
            GR=GR+A(K)*T*DCOS((2.0D0*K-1.0D0)*TH)
 10         GI=GI-A(K)*T*DSIN((2.0D0*K-1.0D0)*TH)
-        IF (X.LE.7.0) THEN
+        IF (X.LE.7.0D0) THEN
            GR1=0.0D0
            GI1=0.0D0
            DO 15 J=0,NA-1
