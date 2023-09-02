@@ -15,37 +15,9 @@ _direct = py3.extension_module('_direct',
   subdir: 'scipy/optimize'
 )
 
-minpack_lib = static_library('minpack',
-  [
-    'minpack/chkder.f',
-    'minpack/dogleg.f',
-    'minpack/dpmpar.f',
-    'minpack/enorm.f',
-    'minpack/fdjac1.f',
-    'minpack/fdjac2.f',
-    'minpack/hybrd.f',
-    'minpack/hybrd1.f',
-    'minpack/hybrj.f',
-    'minpack/hybrj1.f',
-    'minpack/lmder.f',
-    'minpack/lmder1.f',
-    'minpack/lmdif.f',
-    'minpack/lmdif1.f',
-    'minpack/lmpar.f',
-    'minpack/lmstr.f',
-    'minpack/lmstr1.f',
-    'minpack/qform.f',
-    'minpack/qrfac.f',
-    'minpack/qrsolv.f',
-    'minpack/r1mpyq.f',
-    'minpack/r1updt.f',
-    'minpack/rwupdt.f'
-  ]
-)
-
 _minpack = py3.extension_module('_minpack',
   ['minpack.h', '__minpack.h', '_minpackmodule.c'],
-  link_with: minpack_lib,
+  objects: 'minpack.so',
   c_args: numpy_nodepr_api,
   include_directories: '../_lib/src',
   dependencies: np_dep,
