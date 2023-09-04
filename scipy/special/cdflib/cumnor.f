@@ -169,7 +169,7 @@ C------------------------------------------------------------------
               xden = (xden+d(i))*y
    20     CONTINUE
           result = (xnum+c(8))/ (xden+d(8))
-          xsq = aint(y*sixten)/sixten
+          xsq = int(y*sixten)/sixten
           del = (y-xsq)* (y+xsq)
           result = exp(-xsq*xsq*half)*exp(-del*half)*result
           ccum = one - result
@@ -192,7 +192,7 @@ C------------------------------------------------------------------
    30     CONTINUE
           result = xsq* (xnum+p(5))/ (xden+q(5))
           result = (sqrpi-result)/y
-          xsq = aint(x*sixten)/sixten
+          xsq = int(x*sixten)/sixten
           del = (x-xsq)* (x+xsq)
           result = exp(-xsq*xsq*half)*exp(-del*half)*result
           ccum = one - result
