@@ -73,14 +73,14 @@ C     .. Intrinsic Functions ..
 C     ..
 C     .. Statement Functions ..
       DOUBLE PRECISION dg
-      LOGICAL qsmall
+      LOGICAL qsmall1
 C     ..
 C     .. Data statements ..
       DATA eps/1.0D-15/
       DATA abstol/1.0D-300/
 C     ..
 C     .. Statement Function definitions ..
-      qsmall(xx) = .NOT. (sum .GE. abstol .AND. xx .GE. eps*sum)
+      qsmall1(xx) = .NOT. (sum .GE. abstol .AND. xx .GE. eps*sum)
       dg(i) = df + 2.0D0*dble(i)
 C     ..
 C
@@ -152,7 +152,7 @@ C***********************************************************************
 C
       GO TO 40
 
-   30 IF (qsmall(term) .OR. i.EQ.0) GO TO 50
+   30 IF (qsmall1(term) .OR. i.EQ.0) GO TO 50
    40 dfd2 = dg(i)/2.0D0
 C
 C
@@ -188,7 +188,7 @@ C***********************************************************************
 C
       GO TO 70
 
-   60 IF (qsmall(term)) GO TO 80
+   60 IF (qsmall1(term)) GO TO 80
 C
 C
 C     Update weights for next higher J
