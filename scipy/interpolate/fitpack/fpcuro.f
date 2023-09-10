@@ -23,7 +23,7 @@ c  ..local scalars..
       real*8 a1,b1,c1,df,disc,d1,e3,f,four,half,ovfl,pi3,p3,q,r,
      * step,tent,three,two,u,u1,u2,y
 c  ..function references..
-      real*8 abs,max,datan,atan2,cos,sign,sqrt
+      real*8 abs,max,datan,atan2,cos,sign
 c  set constants
       two = 0.2d+01
       three = 0.3d+01

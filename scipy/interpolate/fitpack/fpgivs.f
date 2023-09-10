@@ -8,7 +8,7 @@ c  ..scalar arguments..
 c  ..local scalars..
       real*8 dd,one,store
 c  ..function references..
-      real*8 abs,sqrt
+      real*8 abs
 c  ..
       one = 0.1e+01
       store = abs(piv)

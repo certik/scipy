@@ -328,7 +328,6 @@ c  ..local scalars..
       integer i,i1,i2,j,jwrk,j1,j2,kndu,kndv,knru,knrv,kwest,l,
      * ldz,lfpu,lfpv,lwest,lww,m,maxit,mumin,muu,nc
 c  ..function references..
-      real*8 datan2
       integer max0
 c  ..subroutine references..
 c    fpchec,fpchep,fppogr

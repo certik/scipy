@@ -24,7 +24,7 @@ c  ..local arrays..
       integer idd(2)
       real*8 dzz(3)
 c  ..function references..
-      real*8 abs,datan2,fprati
+      real*8 abs,fprati
       integer max0,min0
 c  ..subroutine references..
 c    fpknot,fpopdi
