@@ -27,7 +27,7 @@ c  ..local scalars..
 c  ..local arrays..
       real*8 hu(4),hv(4)
 c  ..function references..
-      real*8 abs,atan,cos,fprati,sin,sqrt
+      real*8 abs,atan,cos,fprati,sin
       integer min0
 c  ..subroutine references..
 c    fporde,fpbspl,fpback,fpgivs,fprota,fprank,fpdisc,fprppo
