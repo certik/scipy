@@ -354,7 +354,7 @@ c  ..local scalars..
      * lbv,lco,lf,lff,lfp,lh,lq,lsu,lsv,lwest,maxit,ncest,ncc,nuu,
      * nvv,nreg,nrint,nu4,nv4,iopt1,iopt2,iopt3,ipar,nvmin
 c  ..function references..
-      real*8 datan2,sqrt
+      ! real*8 sqrt
       external rad
 c  ..subroutine references..
 c    fppola

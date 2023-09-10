@@ -63,7 +63,7 @@ c  ..local arrays
       real*8 wrk(8)
       integer iwrk(2)
 c  ..function references
-      real*8 atan2,sqrt
+      real*8 atan2
 c  ..
 c  calculate the (u,v)-coordinates of the given point.
       one = 1

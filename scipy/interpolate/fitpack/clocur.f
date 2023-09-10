@@ -265,7 +265,6 @@ c  ..local scalars..
       integer i,ia1,ia2,ib,ifp,ig1,ig2,iq,iz,i1,i2,j1,j2,k1,k2,lwest,
      * maxit,m1,nmin,ncc,j
 c  ..function references..
-      real*8 sqrt
 c  we set up the parameters tol and maxit
       maxit = 20
       tol = 0.1e-02
