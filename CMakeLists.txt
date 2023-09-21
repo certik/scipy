@@ -1,5 +1,5 @@
 # Build using:
-# FC=lfortran FFLAGS=--verbose cmake -DCMAKE_Fortran_FLAGS="--verbose" -DCMAKE_Fortran_FLAGS_DEBUG= .
+# FC=lfortran cmake -DCMAKE_Fortran_FLAGS=--verbose .
 cmake_minimum_required(VERSION 3.10)
 
 project(LFortranScipyBuild)
@@ -144,8 +144,11 @@ foreach(SRC ${SOURCE_FILES_MINPACK})
         COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling")
 endforeach()
 
+get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_MINPACK_RTLIB} COMPILE_OPTIONS)
+list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
+message("XX: ${SOURCE_COMPILE_OPTIONS}")
 set_source_files_properties(${SOURCE_FILES_MINPACK_RTLIB} PROPERTIES
-    COMPILE_OPTIONS --rtlib)
+    COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
 
 # Create shared libraries for each component (Minpack, Fitpack, Specfun)
 add_library(minpack SHARED ${SOURCE_FILES_MINPACK})
