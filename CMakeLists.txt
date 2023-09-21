@@ -1,5 +1,5 @@
 # Build using:
-# FC=lfortran cmake -DCMAKE_Fortran_FLAGS=--verbose .
+# git clean -dfx && FC=lfortran cmake -DCMAKE_Fortran_FLAGS=--verbose . && make -j
 cmake_minimum_required(VERSION 3.10)
 
 project(LFortranScipyBuild)
@@ -159,7 +159,7 @@ set_target_properties(minpack PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 target_link_libraries(minpack PRIVATE ${LFORTRAN_RUNTIME_LIBRARY_PATH})
 
 # Set Fortran as the link language
-set_target_properties(minpack PROPERTIES LINKER_LANGUAGE Fortran)
+set_target_properties(minpack PROPERTIES LINKER_LANGUAGE C)
 
 # Rename the shared library to have a .so extension
 set_target_properties(minpack PROPERTIES OUTPUT_NAME minpack SUFFIX ".so")
