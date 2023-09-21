@@ -1,20 +1,10 @@
+# Build using:
+# FC=lfortran FFLAGS=--verbose cmake -DCMAKE_Fortran_FLAGS="--verbose" -DCMAKE_Fortran_FLAGS_DEBUG= .
 cmake_minimum_required(VERSION 3.10)
 
 project(LFortranScipyBuild)
-
-# Set the compiler (adjust as needed)
 enable_language(Fortran)
-set(CMAKE_SHARED_LIBRARY_PREFIX "")
-set(CMAKE_Fortran_COMPILER)
-set(CMAKE_Fortran_COMPILER_LFORTRAN)
-set(CONDA_PREFIX_LIB_DIR $ENV{CONDA_PREFIX}/lib)  # Assuming CONDA_PREFIX is set as an environment variable
 
-
-# Set the output directory for compiled binaries
-set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/lfortran-build)
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-set(LFORTRAN_RUNTIME_LIBRARY_PATH)
 set(SPECFUN_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/special/)
 set(MINPACK_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/optimize/)
 set(FITPACK_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/interpolate/)
@@ -28,32 +18,33 @@ set(SOURCE_FILES_SPECFUN
 )
 
 set(SOURCE_FILES_MINPACK
-    "../scipy/optimize/minpack/dogleg.f"
-    "../scipy/optimize/minpack/dpmpar.f"
-    "../scipy/optimize/minpack/enorm.f"
-    "../scipy/optimize/minpack/fdjac1.f"
-    "../scipy/optimize/minpack/fdjac2.f"
-    "../scipy/optimize/minpack/hybrd.f"
-    "../scipy/optimize/minpack/hybrd1.f"
-    "../scipy/optimize/minpack/hybrj.f"
-    "../scipy/optimize/minpack/hybrj1.f"
-    "../scipy/optimize/minpack/lmder.f"
-    "../scipy/optimize/minpack/lmder1.f"
-    "../scipy/optimize/minpack/lmdif.f"
-    "../scipy/optimize/minpack/lmdif1.f"
-    "../scipy/optimize/minpack/lmpar.f"
-    "../scipy/optimize/minpack/lmstr.f"
-    "../scipy/optimize/minpack/lmstr1.f"
-    "../scipy/optimize/minpack/qform.f"
-    "../scipy/optimize/minpack/qrfac.f"
-    "../scipy/optimize/minpack/qrsolv.f"
-    "../scipy/optimize/minpack/r1mpyq.f"
-    "../scipy/optimize/minpack/r1updt.f"
-    "../scipy/optimize/minpack/rwupdt.f"
+    "scipy/optimize/minpack/dogleg.f"
+    "scipy/optimize/minpack/dpmpar.f"
+    "scipy/optimize/minpack/enorm.f"
+    "scipy/optimize/minpack/fdjac1.f"
+    "scipy/optimize/minpack/fdjac2.f"
+    "scipy/optimize/minpack/hybrd.f"
+    "scipy/optimize/minpack/hybrd1.f"
+    "scipy/optimize/minpack/hybrj.f"
+    "scipy/optimize/minpack/hybrj1.f"
+    "scipy/optimize/minpack/lmder.f"
+    "scipy/optimize/minpack/lmder1.f"
+    "scipy/optimize/minpack/lmdif.f"
+    "scipy/optimize/minpack/lmdif1.f"
+    "scipy/optimize/minpack/lmpar.f"
+    "scipy/optimize/minpack/lmstr.f"
+    "scipy/optimize/minpack/lmstr1.f"
+    "scipy/optimize/minpack/qform.f"
+    "scipy/optimize/minpack/qrfac.f"
+    "scipy/optimize/minpack/qrsolv.f"
+    "scipy/optimize/minpack/r1mpyq.f"
+    "scipy/optimize/minpack/r1updt.f"
+    "scipy/optimize/minpack/rwupdt.f"
+    "scipy/optimize/minpack/chkder.f"
 )
 
 set(SOURCE_FILES_MINPACK_RTLIB
-    "../scipy/optimize/minpack/chkder.f"
+    "scipy/optimize/minpack/chkder.f"
 )
 
 set(SOURCE_FILES_FITPACK
@@ -148,101 +139,28 @@ SET(SOURCE_FILES_FITPACK_RTLIB
     "../scipy/interpolate/fitpack/evapol.f"
 )
 
-# Compile each source file into an object file
-foreach(SRC ${SOURCE_FILES_SPECFUN})
-    get_filename_component(SRC_NAME ${SRC} NAME_WE)
-    set(OBJ ${CMAKE_BINARY_DIR}/${SRC_NAME}.o)
-    add_custom_command(
-        OUTPUT ${OBJ}
-        # use lfortran to compile the source file
-        COMMAND ${CMAKE_Fortran_COMPILER_LFORTRAN} -c ${SRC} -o ${OBJ} --fixed-form --implicit-typing --implicit-interface --generate-object-code --use-loop-variable-after-loop --all-mangling --mangle-underscore --bindc-mangling --rtlib
-        DEPENDS ${SRC}
-    )
-    list(APPEND OBJECT_FILES ${OBJ})
-endforeach()
-
 foreach(SRC ${SOURCE_FILES_MINPACK})
-    get_filename_component(SRC_NAME ${SRC} NAME_WE)
-    set(OBJ ${CMAKE_BINARY_DIR}/${SRC_NAME}.o)
-    add_custom_command(
-        OUTPUT ${OBJ}
-        # use lfortran to compile the source file
-        COMMAND ${CMAKE_Fortran_COMPILER_LFORTRAN} -c ${SRC} -o ${OBJ} --fixed-form --implicit-typing --implicit-interface --generate-object-code --use-loop-variable-after-loop --all-mangling --mangle-underscore --bindc-mangling
-        DEPENDS ${SRC}
-    )
-    list(APPEND OBJECT_FILES_MINPACK ${OBJ})
+    set_source_files_properties(${SRC} PROPERTIES
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling")
 endforeach()
 
-foreach(SRC ${SOURCE_FILES_MINPACK_RTLIB})
-    get_filename_component(SRC_NAME ${SRC} NAME_WE)
-    set(OBJ ${CMAKE_BINARY_DIR}/${SRC_NAME}.o)
-    add_custom_command(
-        OUTPUT ${OBJ}
-        # use lfortran to compile the source file
-        COMMAND ${CMAKE_Fortran_COMPILER_LFORTRAN} -c ${SRC} -o ${OBJ} --fixed-form --implicit-typing --implicit-interface --generate-object-code --use-loop-variable-after-loop --all-mangling --mangle-underscore --bindc-mangling --rtlib
-        DEPENDS ${SRC}
-    )
-    list(APPEND OBJECT_FILES_MINPACK ${OBJ})
-endforeach()
-
-foreach(SRC ${SOURCE_FILES_FITPACK})
-    get_filename_component(SRC_NAME ${SRC} NAME_WE)
-    set(OBJ ${CMAKE_BINARY_DIR}/${SRC_NAME}.o)
-    add_custom_command(
-        OUTPUT ${OBJ}
-        # use lfortran to compile the source file
-        COMMAND ${CMAKE_Fortran_COMPILER_LFORTRAN} -c ${SRC} -o ${OBJ} --fixed-form --implicit-typing --implicit-interface --generate-object-code --use-loop-variable-after-loop --all-mangling --mangle-underscore --bindc-mangling
-        DEPENDS ${SRC}
-    )
-    list(APPEND OBJECT_FILES_FITPACK ${OBJ})
-endforeach()
-
-foreach(SRC ${SOURCE_FILES_FITPACK_RTLIB})
-    get_filename_component(SRC_NAME ${SRC} NAME_WE)
-    set(OBJ ${CMAKE_BINARY_DIR}/${SRC_NAME}.o)
-    add_custom_command(
-        OUTPUT ${OBJ}
-        # use lfortran to compile the source file
-        COMMAND ${CMAKE_Fortran_COMPILER_LFORTRAN} -c ${SRC} -o ${OBJ} --fixed-form --implicit-typing --implicit-interface --generate-object-code --use-loop-variable-after-loop --all-mangling --mangle-underscore --bindc-mangling --rtlib
-        DEPENDS ${SRC}
-    )
-    list(APPEND OBJECT_FILES_FITPACK ${OBJ})
-endforeach()
-
+set_source_files_properties(${SOURCE_FILES_MINPACK_RTLIB} PROPERTIES
+    COMPILE_OPTIONS --rtlib)
 
 # Create shared libraries for each component (Minpack, Fitpack, Specfun)
-add_library(specfun SHARED ${OBJECT_FILES} ${LFORTRAN_RUNTIME_LIBRARY_PATH})
-add_library(minpack SHARED ${OBJECT_FILES_MINPACK} ${OBJECT_FILES_MINPACK_RTLIB} ${LFORTRAN_RUNTIME_LIBRARY_PATH})
-add_library(fitpack SHARED ${OBJECT_FILES_FITPACK} ${OBJECT_FILES_FITPACK_RTLIB} ${LFORTRAN_RUNTIME_LIBRARY_PATH})
+add_library(minpack SHARED ${SOURCE_FILES_MINPACK})
+set_target_properties(minpack PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 
 
 # Link the libraries
-target_link_libraries(specfun PRIVATE ${LFORTRAN_RUNTIME_LIBRARY_PATH})
 target_link_libraries(minpack PRIVATE ${LFORTRAN_RUNTIME_LIBRARY_PATH})
-target_link_libraries(fitpack PRIVATE ${LFORTRAN_RUNTIME_LIBRARY_PATH})
 
 # Set Fortran as the link language
-set_target_properties(specfun PROPERTIES LINKER_LANGUAGE Fortran)
 set_target_properties(minpack PROPERTIES LINKER_LANGUAGE Fortran)
-set_target_properties(fitpack PROPERTIES LINKER_LANGUAGE Fortran)
-
-# copy runtime library to conda prefix lib directory
-file(COPY "${LFORTRAN_RUNTIME_LIBRARY_PATH}" DESTINATION "${CONDA_PREFIX_LIB_DIR}")
 
 # Rename the shared library to have a .so extension
-set_target_properties(specfun PROPERTIES OUTPUT_NAME specfun SUFFIX ".so")
-
 set_target_properties(minpack PROPERTIES OUTPUT_NAME minpack SUFFIX ".so")
 
-set_target_properties(fitpack PROPERTIES OUTPUT_NAME fitpack SUFFIX ".so")
-
 # Specify installation paths
-install(TARGETS specfun DESTINATION ${SPECFUN_DIRECTORY})
-install(TARGETS specfun DESTINATION ${CONDA_PREFIX_LIB_DIR})
-
-
 install(TARGETS minpack DESTINATION ${MINPACK_DIRECTORY})
 install(TARGETS minpack DESTINATION ${CONDA_PREFIX_LIB_DIR})
-
-install(TARGETS fitpack DESTINATION ${FITPACK_DIRECTORY})
-install(TARGETS fitpack DESTINATION ${CONDA_PREFIX_LIB_DIR})
