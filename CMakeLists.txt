@@ -1,5 +1,5 @@
 # Build using:
-# git clean -dfx && FC=lfortran cmake -DCMAKE_Fortran_FLAGS=--verbose . && make -j
+# git clean -dfx && FC=lfortran cmake -DCMAKE_Fortran_FLAGS=--verbose -DLFORTRAN_RUNTIME_LIBRARY_PATH=/Users/ondrej/repos/lfortran/lfortran/src/runtime/liblfortran_runtime.dylib . && make -j
 cmake_minimum_required(VERSION 3.10)
 
 project(LFortranScipyBuild)
@@ -146,13 +146,13 @@ endforeach()
 
 get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_MINPACK_RTLIB} COMPILE_OPTIONS)
 list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
-message("XX: ${SOURCE_COMPILE_OPTIONS}")
 set_source_files_properties(${SOURCE_FILES_MINPACK_RTLIB} PROPERTIES
     COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
 
 # Create shared libraries for each component (Minpack, Fitpack, Specfun)
 add_library(minpack SHARED ${SOURCE_FILES_MINPACK})
 set_target_properties(minpack PROPERTIES POSITION_INDEPENDENT_CODE OFF)
+
 
 
 # Link the libraries
