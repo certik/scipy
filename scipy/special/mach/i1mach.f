@@ -1,4 +1,5 @@
       INTEGER FUNCTION I1MACH(I)
+      use iso_c_binding, only: c_loc, c_f_pointer
       INTEGER I
 C
 C    I1MACH( 1) = THE STANDARD INPUT UNIT.
@@ -23,11 +24,18 @@ C    I1MACH(14) = T, THE NUMBER OF BASE-B DIGITS.
 C    I1MACH(15) = EMIN, THE SMALLEST EXPONENT E.
 C    I1MACH(16) = EMAX, THE LARGEST EXPONENT E.
 C
-      INTEGER IMACH(16), OUTPUT, SC, SMALL(2)
-      SAVE IMACH, SC
-      REAL RMACH
-      EQUIVALENCE (IMACH(4),OUTPUT), (RMACH,SMALL(1))
+      ! INTEGER IMACH(16), OUTPUT, SC, SMALL(2)
+      INTEGER SC
+      SAVE SC
+      ! SAVE IMACH, SC
+      ! REAL RMACH
+      ! EQUIVALENCE (IMACH(4),OUTPUT), (RMACH,SMALL(1))
       INTEGER I3, J, K, T3E(3)
+      INTEGER, target :: IMACH(16), SMALL(2)
+      INTEGER, pointer :: OUTPUT
+      REAL, pointer :: RMACH
+      call c_f_pointer(c_loc(imach(4)), output)
+      call c_f_pointer(c_loc(small(1)), rmach)
       DATA T3E(1) / 9777664 /
       DATA T3E(2) / 5323660 /
       DATA T3E(3) / 46980 /
@@ -182,53 +190,61 @@ C
                IMACH(15) = -1024
                IMACH(16) = 1023
             ELSE
-               DO 10 I3 = 1, 3
-                  J = SMALL(1) / 10000000
-                  K = SMALL(1) - 10000000*J
-                  IF (K .NE. T3E(I3)) GO TO 20
-                  SMALL(1) = J
- 10               CONTINUE
-*              *** CRAY T3E ***
-               IMACH( 1) = 5
-               IMACH( 2) = 6
-               IMACH( 3) = 0
-               IMACH( 4) = 0
-               IMACH( 5) = 64
-               IMACH( 6) = 8
-               IMACH( 7) = 2
-               IMACH( 8) = 63
-               CALL I1MCR1(IMACH(9), K, 32767, 16777215, 16777215)
+!                DO 10 I3 = 1, 3
+!                   J = SMALL(1) / 10000000
+!                   K = SMALL(1) - 10000000*J
+!                   IF (K .NE. T3E(I3)) GO TO 20
+!                   SMALL(1) = J
+!  10               CONTINUE
+! *              *** CRAY T3E ***
+!                IMACH( 1) = 5
+!                IMACH( 2) = 6
+!                IMACH( 3) = 0
+!                IMACH( 4) = 0
+!                IMACH( 5) = 64
+!                IMACH( 6) = 8
+!                IMACH( 7) = 2
+!                IMACH( 8) = 63
+!                CALL I1MCR1(IMACH(9), K, 32767, 16777215, 16777215)
+!                IMACH(10) = 2
+!                IMACH(11) = 53
+!                IMACH(12) = -1021
+!                IMACH(13) = 1024
+!                IMACH(14) = 53
+!                IMACH(15) = -1021
+!                IMACH(16) = 1024
+!                GO TO 35
+!  20            CALL I1MCR1(J, K, 16405, 9876536, 0)
+!                IF (SMALL(1) .NE. J) THEN
+!                   WRITE(*,9020)
+!                   STOP 777
+!                   END IF
+! *              *** CRAY 1, XMP, 2, AND 3 ***
+!                IMACH(1) = 5
+!                IMACH(2) = 6
+!                IMACH(3) = 102
+!                IMACH(4) = 6
+!                IMACH(5) = 46
+!                IMACH(6) = 8
+!                IMACH(7) = 2
+!                IMACH(8) = 45
+!                CALL I1MCR1(IMACH(9), K, 0, 4194303, 16777215)
+!                IMACH(10) = 2
+!                IMACH(11) = 47
+!                IMACH(12) = -8188
+!                IMACH(13) = 8189
+!                IMACH(14) = 94
+!                IMACH(15) = -8141
+!                IMACH(16) = 8189
+!                GO TO 35
                IMACH(10) = 2
-               IMACH(11) = 53
-               IMACH(12) = -1021
-               IMACH(13) = 1024
+               IMACH(11) = 24
+               IMACH(12) = -125
+               IMACH(13) = 128
                IMACH(14) = 53
                IMACH(15) = -1021
                IMACH(16) = 1024
-               GO TO 35
- 20            CALL I1MCR1(J, K, 16405, 9876536, 0)
-               IF (SMALL(1) .NE. J) THEN
-                  WRITE(*,9020)
-                  STOP 777
-                  END IF
-*              *** CRAY 1, XMP, 2, AND 3 ***
-               IMACH(1) = 5
-               IMACH(2) = 6
-               IMACH(3) = 102
-               IMACH(4) = 6
-               IMACH(5) = 46
-               IMACH(6) = 8
-               IMACH(7) = 2
-               IMACH(8) = 45
-               CALL I1MCR1(IMACH(9), K, 0, 4194303, 16777215)
-               IMACH(10) = 2
-               IMACH(11) = 47
-               IMACH(12) = -8188
-               IMACH(13) = 8189
-               IMACH(14) = 94
-               IMACH(15) = -8141
-               IMACH(16) = 8189
-               GO TO 35
+               SC = 987
                END IF
             END IF
          IMACH( 1) = 5
