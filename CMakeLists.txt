@@ -177,10 +177,14 @@ add_library(fitpack SHARED ${SOURCE_FILES_FITPACK})
 set_target_properties(fitpack PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 
 # Link the libraries
-target_link_libraries(minpack PRIVATE ${LFORTRAN_RUNTIME_LIBRARY_PATH})
-target_link_libraries(specfun PRIVATE ${LFORTRAN_RUNTIME_LIBRARY_PATH})
-target_link_libraries(fitpack PRIVATE ${LFORTRAN_RUNTIME_LIBRARY_PATH})
-
+message("${LFORTRAN_RUNTIME_LIBRARY_PATH}")
+find_library(LFORTRAN_RUNTIME_LIBRARY lfortran_runtime PATH "${LFORTRAN_RUNTIME_LIBRARY_PATH}")
+message("${LFORTRAN_RUNTIME_LIBRARY}")
+add_library(lfortran_runtime SHARED IMPORTED)
+set_property(TARGET lfortran_runtime PROPERTY IMPORTED_LOCATION "${LFORTRAN_RUNTIME_LIBRARY}")
+target_link_libraries(minpack PRIVATE lfortran_runtime)
+target_link_libraries(specfun PRIVATE lfortran_runtime)
+target_link_libraries(fitpack PRIVATE lfortran_runtime)
 
 # Set C as the link language
 set_target_properties(minpack specfun fitpack PROPERTIES LINKER_LANGUAGE C)
@@ -189,12 +193,6 @@ set_target_properties(minpack specfun fitpack PROPERTIES LINKER_LANGUAGE C)
 set_target_properties(minpack PROPERTIES OUTPUT_NAME minpack SUFFIX ".so")
 set_target_properties(specfun PROPERTIES OUTPUT_NAME specfun SUFFIX ".so")
 set_target_properties(fitpack PROPERTIES OUTPUT_NAME fitpack SUFFIX ".so")
-
-configure_file(
-    ${LFORTRAN_RUNTIME_LIBRARY_PATH}  # Source file path
-    $ENV{CONDA_PREFIX}/lib  # Destination file path
-    COPYONLY  # Use COPYONLY to copy the file (no variable substitution)
-)
 
 # Specify installation paths
 install(TARGETS minpack DESTINATION ${MINPACK_DIRECTORY})
