@@ -1,4 +1,5 @@
       INTEGER FUNCTION I1MACH(I)
+      use iso_c_binding, only: c_loc, c_f_pointer
       INTEGER I
 C
 C    I1MACH( 1) = THE STANDARD INPUT UNIT.
@@ -7,11 +8,11 @@ C    I1MACH( 3) = THE STANDARD PUNCH UNIT.
 C    I1MACH( 4) = THE STANDARD ERROR MESSAGE UNIT.
 C    I1MACH( 5) = THE NUMBER OF BITS PER INTEGER STORAGE UNIT.
 C    I1MACH( 6) = THE NUMBER OF CHARACTERS PER CHARACTER STORAGE UNIT.
-C    INTEGERS HAVE FORM SIGN ( X(S-1)*A**(S-1) + ... + X(1)*A + X(0) )
+C    INTEGERS HAVE FORM SIGN ( X(S-1)A*(S-1) + ... + X(1)*A + X(0) )
 C    I1MACH( 7) = A, THE BASE.
 C    I1MACH( 8) = S, THE NUMBER OF BASE-A DIGITS.
 C    I1MACH( 9) = A**S - 1, THE LARGEST MAGNITUDE.
-C    FLOATS HAVE FORM  SIGN (B**E)*( (X(1)/B) + ... + (X(T)/B**T) )
+C    FLOATS HAVE FORM  SIGN (B*E)( (X(1)/B) + ... + (X(T)/B**T) )
 C               WHERE  EMIN .LE. E .LE. EMAX.
 C    I1MACH(10) = B, THE BASE.
 C  SINGLE-PRECISION
@@ -23,11 +24,18 @@ C    I1MACH(14) = T, THE NUMBER OF BASE-B DIGITS.
 C    I1MACH(15) = EMIN, THE SMALLEST EXPONENT E.
 C    I1MACH(16) = EMAX, THE LARGEST EXPONENT E.
 C
-      INTEGER IMACH(16), OUTPUT, SC, SMALL(2)
-      SAVE IMACH, SC
-      REAL RMACH
-      EQUIVALENCE (IMACH(4),OUTPUT), (RMACH,SMALL(1))
+      ! INTEGER IMACH(16), OUTPUT, SC, SMALL(2)
+      INTEGER SC
+      SAVE SC
+      ! SAVE IMACH, SC
+      ! REAL RMACH
+      ! EQUIVALENCE (IMACH(4),OUTPUT), (RMACH,SMALL(1))
       INTEGER I3, J, K, T3E(3)
+      INTEGER, target :: IMACH(16), SMALL(2)
+      INTEGER, pointer :: OUTPUT
+      REAL, pointer :: RMACH
+      call c_f_pointer(c_loc(imach(4)), output)
+      call c_f_pointer(c_loc(small(1)), rmach)
       DATA T3E(1) / 9777664 /
       DATA T3E(2) / 5323660 /
       DATA T3E(3) / 46980 /
