@@ -207,17 +207,6 @@ cdflib_lib = static_library('cdflib',
   ]
 )
 
-mach_sources = [
-  'mach/d1mach.f',
-  'mach/i1mach.f',
-  'mach/xerror.f'
-]
-
-mach_lib = static_library('mach',
-  mach_sources,
-  fortran_args: [_fflag_Wno_unused_dummy_argument, _fflag_Wno_maybe_uninitialized]
-)
-
 specfun_lib = static_library('specfun',
   'specfun/specfun.f',
   fortran_args: _fflag_Wno_maybe_uninitialized
@@ -297,12 +286,12 @@ py3.extension_module('_ufuncs',
   link_with: [
     cdflib_lib,
     cephes_lib,
-    mach_lib,
     specfun_lib
   ],
   objects: [
     'specfun.so',
     'amos.so',
+    'mach.so',
   ],
   install: true,
   link_language: 'fortran',
@@ -366,12 +355,12 @@ py3.extension_module('cython_special',
   link_with: [
     cdflib_lib,
     cephes_lib,
-    mach_lib,
     specfun_lib
   ],
   objects: [
     'specfun.so',
     'amos.so',
+    'mach.so',
   ],
   install: true,
   link_language: 'fortran',
