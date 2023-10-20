@@ -141,6 +141,58 @@ SET(SOURCE_FILES_FITPACK_RTLIB
     "../scipy/interpolate/fitpack/fpcuro.f"
 )
 
+set(SOURCE_FILES_AMOS
+    "../scipy/special/amos/dgamln.f"
+    "../scipy/special/amos/zabs.f"
+    "../scipy/special/amos/zacai.f"
+    "../scipy/special/amos/zacon.f"
+    "../scipy/special/amos/zairy.f"
+    "../scipy/special/amos/zasyi.f"
+    "../scipy/special/amos/zbesh.f"
+    "../scipy/special/amos/zbesi.f"
+    "../scipy/special/amos/zbesj.f"
+    "../scipy/special/amos/zbesk.f"
+    "../scipy/special/amos/zbesy.f"
+    "../scipy/special/amos/zbinu.f"
+    "../scipy/special/amos/zbiry.f"
+    "../scipy/special/amos/zbknu.f"
+    "../scipy/special/amos/zbuni.f"
+    "../scipy/special/amos/zbunk.f"
+    "../scipy/special/amos/zdiv.f"
+    "../scipy/special/amos/zexp.f"
+    "../scipy/special/amos/zkscl.f"
+    "../scipy/special/amos/zlog.f"
+    "../scipy/special/amos/zmlri.f"
+    "../scipy/special/amos/zmlt.f"
+    "../scipy/special/amos/zrati.f"
+    "../scipy/special/amos/zs1s2.f"
+    "../scipy/special/amos/zseri.f"
+    "../scipy/special/amos/zshch.f"
+    "../scipy/special/amos/zsqrt.f"
+    "../scipy/special/amos/zuchk.f"
+    "../scipy/special/amos/zunhj.f"
+    "../scipy/special/amos/zuni1.f"
+    "../scipy/special/amos/zuni2.f"
+    "../scipy/special/amos/zunik.f"
+    "../scipy/special/amos/zunk1.f"
+    "../scipy/special/amos/zunk2.f"
+    "../scipy/special/amos/zuoik.f"
+    "../scipy/special/amos/zwrsk.f"
+    "../scipy/special/mach/d1mach.f"
+    "../scipy/special/mach/i1mach.f"
+    "../scipy/special/mach/xerror.f"
+)
+
+SET(SOURCE_FILES_AMOS_RTLIB
+    "../scipy/special/amos/zairy.f"
+)
+
+set(SOURCE_FILES_MACH
+    "../scipy/special/mach/d1mach.f"
+    "../scipy/special/mach/i1mach.f"
+    "../scipy/special/mach/xerror.f"
+)
+
 foreach(SRC ${SOURCE_FILES_MINPACK})
     set_source_files_properties(${SRC} PROPERTIES
         COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
@@ -166,6 +218,22 @@ list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
 set_source_files_properties(${SOURCE_FILES_FITPACK_RTLIB} PROPERTIES
     COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
 
+foreach(SRC ${SOURCE_FILES_AMOS})
+    set_source_files_properties(${SRC} PROPERTIES
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+endforeach()
+
+get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_AMOS_RTLIB} COMPILE_OPTIONS)
+list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
+set_source_files_properties(${SOURCE_FILES_AMOS_RTLIB} PROPERTIES
+    COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
+
+foreach(SRC ${SOURCE_FILES_MACH})
+    set_source_files_properties(${SRC} PROPERTIES
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+endforeach()
+
+
 # Create shared libraries for each component (Minpack, Fitpack, Specfun)
 add_library(minpack SHARED ${SOURCE_FILES_MINPACK})
 set_target_properties(minpack PROPERTIES POSITION_INDEPENDENT_CODE OFF)
@@ -176,6 +244,12 @@ set_target_properties(specfun PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 add_library(fitpack SHARED ${SOURCE_FILES_FITPACK})
 set_target_properties(fitpack PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 
+add_library(amos SHARED ${SOURCE_FILES_AMOS})
+set_target_properties(amos PROPERTIES POSITION_INDEPENDENT_CODE OFF)
+
+add_library(mach SHARED ${SOURCE_FILES_MACH})
+set_target_properties(mach PROPERTIES POSITION_INDEPENDENT_CODE OFF)
+
 # Link the libraries
 message("${LFORTRAN_RUNTIME_LIBRARY_PATH}")
 find_library(LFORTRAN_RUNTIME_LIBRARY lfortran_runtime PATH "${LFORTRAN_RUNTIME_LIBRARY_PATH}")
@@ -185,14 +259,18 @@ set_property(TARGET lfortran_runtime PROPERTY IMPORTED_LOCATION "${LFORTRAN_RUNT
 target_link_libraries(minpack PRIVATE lfortran_runtime)
 target_link_libraries(specfun PRIVATE lfortran_runtime)
 target_link_libraries(fitpack PRIVATE lfortran_runtime)
+target_link_libraries(amos PRIVATE lfortran_runtime)
+target_link_libraries(mach PRIVATE lfortran_runtime)
 
 # Set C as the link language
-set_target_properties(minpack specfun fitpack PROPERTIES LINKER_LANGUAGE C)
+set_target_properties(minpack specfun fitpack amos mach PROPERTIES LINKER_LANGUAGE C)
 
 # Rename the shared library to have a .so extension
 set_target_properties(minpack PROPERTIES OUTPUT_NAME minpack SUFFIX ".so")
 set_target_properties(specfun PROPERTIES OUTPUT_NAME specfun SUFFIX ".so")
 set_target_properties(fitpack PROPERTIES OUTPUT_NAME fitpack SUFFIX ".so")
+set_target_properties(amos PROPERTIES OUTPUT_NAME amos SUFFIX ".so")
+set_target_properties(mach PROPERTIES OUTPUT_NAME mach SUFFIX ".so")
 
 # Specify installation paths
 install(TARGETS minpack DESTINATION ${MINPACK_DIRECTORY})
@@ -203,3 +281,9 @@ install(TARGETS specfun DESTINATION $ENV{CONDA_PREFIX}/lib)
 
 install(TARGETS fitpack DESTINATION ${FITPACK_DIRECTORY})
 install(TARGETS fitpack DESTINATION $ENV{CONDA_PREFIX}/lib)
+
+install(TARGETS amos DESTINATION ${SPECFUN_DIRECTORY})
+install(TARGETS amos DESTINATION $ENV{CONDA_PREFIX}/lib)
+
+install(TARGETS mach DESTINATION ${SPECFUN_DIRECTORY})
+install(TARGETS mach DESTINATION $ENV{CONDA_PREFIX}/lib)
