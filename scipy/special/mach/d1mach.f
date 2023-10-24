@@ -1,5 +1,5 @@
       DOUBLE PRECISION FUNCTION D1MACH(I)
-      INTEGER I
+      ! INTEGER I
 C
 C  DOUBLE-PRECISION MACHINE CONSTANTS
 C  D1MACH( 1) = B**(EMIN-1), THE SMALLEST POSITIVE MAGNITUDE.
@@ -8,20 +8,40 @@ C  D1MACH( 3) = B**(-T), THE SMALLEST RELATIVE SPACING.
 C  D1MACH( 4) = B**(1-T), THE LARGEST RELATIVE SPACING.
 C  D1MACH( 5) = LOG10(B)
 C
-      INTEGER SMALL(2)
-      INTEGER LARGE(2)
-      INTEGER RIGHT(2)
-      INTEGER DIVER(2)
-      INTEGER LOG10(2)
-      INTEGER SC, CRAY1(38), J
-      COMMON /D9MACH/ CRAY1
-      SAVE SMALL, LARGE, RIGHT, DIVER, LOG10, SC
-      DOUBLE PRECISION DMACH(5)
-      EQUIVALENCE (DMACH(1),SMALL(1))
-      EQUIVALENCE (DMACH(2),LARGE(1))
-      EQUIVALENCE (DMACH(3),RIGHT(1))
-      EQUIVALENCE (DMACH(4),DIVER(1))
-      EQUIVALENCE (DMACH(5),LOG10(1))
+      ! INTEGER SMALL(2)
+      ! INTEGER LARGE(2)
+      ! INTEGER RIGHT(2)
+      ! INTEGER DIVER(2)
+      ! INTEGER LOG10(2)
+      ! INTEGER SC, CRAY1(38), J
+      ! COMMON /D9MACH/ CRAY1
+      ! SAVE SMALL, LARGE, RIGHT, DIVER, LOG10, SC
+      ! DOUBLE PRECISION DMACH(5)
+      ! EQUIVALENCE (DMACH(1),SMALL(1))
+      ! EQUIVALENCE (DMACH(2),LARGE(1))
+      ! EQUIVALENCE (DMACH(3),RIGHT(1))
+      ! EQUIVALENCE (DMACH(4),DIVER(1))
+      ! EQUIVALENCE (DMACH(5),LOG10(1))
+
+      ! uncomment the following as a workaround
+      use iso_c_binding, only: c_loc, c_f_pointer
+      integer i
+      integer sc, cray1(38), j
+      common /d9mach/ cray1
+      ! save small, large, right, diver, log10,
+      save sc
+      DOUBLE PRECISION, target :: DMACH(5)
+      INTEGER*4, pointer :: SMALL(:)
+      INTEGER*4, pointer :: LARGE(:)
+      INTEGER*4, pointer :: RIGHT(:)
+      INTEGER*4, pointer :: DIVER(:)
+      INTEGER*4, pointer :: LOG10(:)
+      call c_f_pointer(c_loc(dmach(1)), small, [2])
+      call c_f_pointer(c_loc(dmach(2)), large, [2])
+      call c_f_pointer(c_loc(dmach(3)), right, [2])
+      call c_f_pointer(c_loc(dmach(4)), diver, [2])
+      call c_f_pointer(c_loc(dmach(5)), log10, [2])
+
 C  THIS VERSION ADAPTS AUTOMATICALLY TO MOST CURRENT MACHINES.
 C  R1MACH CAN HANDLE AUTO-DOUBLE COMPILING, BUT THIS VERSION OF
 C  D1MACH DOES NOT, BECAUSE WE DO NOT HAVE QUAD CONSTANTS FOR

@@ -285,13 +285,12 @@ py3.extension_module('_ufuncs',
   link_args: version_link_args,
   link_with: [
     cdflib_lib,
-    cephes_lib,
-    specfun_lib
+    cephes_lib
   ],
   objects: [
     'specfun.so',
     'amos.so',
-    'mach.so',
+    'mach.so'
   ],
   install: true,
   link_language: 'fortran',
@@ -354,13 +353,12 @@ py3.extension_module('cython_special',
   dependencies: [np_dep, npymath_lib, lapack],
   link_with: [
     cdflib_lib,
-    cephes_lib,
-    specfun_lib
+    cephes_lib
   ],
   objects: [
     'specfun.so',
     'amos.so',
-    'mach.so',
+    'mach.so'
   ],
   install: true,
   link_language: 'fortran',
