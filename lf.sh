@@ -11,4 +11,4 @@ make install
 cp /home/harshita/Desktop/lfortran/src/runtime/liblfortran_runtime.*  $CONDA_PREFIX/lib
 cd ../
 python dev.py build
-python dev.py test -t scipy.special -v
+python dev.py test -t scipy.odr -v
