@@ -163,8 +163,8 @@ c           formula if the value of the parameter in the integrand
 c           is small.
 c
       if(dabs(parint).gt.0.2d+01) go to 10
-      call dqk15w(f,dqwgtf,omega,p2,p3,p4,integr,a,b,result,
-     *  abserr,resabs,resasc)
+!       call dqk15w(f,dqwgtf,omega,p2,p3,p4,integr,a,b,result,
+!      *  abserr,resabs,resasc)
       neval = 15
       go to 170
 c

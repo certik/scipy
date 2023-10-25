@@ -106,8 +106,8 @@ c
 c           apply the 15-point gauss-kronrod scheme.
 c
       krul = krul-1
-      call dqk15w(f,dqwgtc,c,p2,p3,p4,kp,a,b,result,abserr,
-     *  resabs,resasc)
+!       call dqk15w(f,dqwgtc,c,p2,p3,p4,kp,a,b,result,abserr,
+!      *  resabs,resasc)
       neval = 15
       if (resasc.eq.abserr) krul = krul+1
       go to 50

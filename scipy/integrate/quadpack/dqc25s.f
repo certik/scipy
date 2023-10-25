@@ -132,8 +132,8 @@ c           if a.gt.bl and b.lt.br, apply the 15-point gauss-kronrod
 c           scheme.
 c
 c
-      call dqk15w(f,dqwgts,a,b,alfa,beta,integr,bl,br,
-     *    result,abserr,resabs,resasc)
+!       call dqk15w(f,dqwgts,a,b,alfa,beta,integr,bl,br,
+!      *    result,abserr,resabs,resasc)
       nev = 15
       go to 270
 c
