@@ -9,6 +9,7 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "") # Remove the "lib" prefix from the shared li
 set(SPECFUN_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/special/)
 set(MINPACK_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/optimize/)
 set(FITPACK_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/interpolate/)
+set(QUADPACK_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/integrate/)
 
 
 
@@ -194,6 +195,57 @@ SET(SOURCE_FILES_MACH_RTLIB
     "../scipy/special/mach/d1mach.f"
 )
 
+SET(SOURCE_FILES_QUADPACK
+    "../scipy/integrate/quadpack/dqag.f"
+    "../scipy/integrate/quadpack/dqage.f"
+    "../scipy/integrate/quadpack/dqagi.f"
+    "../scipy/integrate/quadpack/dqagie.f"
+    "../scipy/integrate/quadpack/dqagp.f"
+    "../scipy/integrate/quadpack/dqagpe.f"
+    "../scipy/integrate/quadpack/dqags.f"
+    "../scipy/integrate/quadpack/dqagse.f"
+    "../scipy/integrate/quadpack/dqawc.f"
+    "../scipy/integrate/quadpack/dqawce.f"
+    "../scipy/integrate/quadpack/dqawf.f"
+    "../scipy/integrate/quadpack/dqawfe.f"
+    "../scipy/integrate/quadpack/dqawo.f"
+    "../scipy/integrate/quadpack/dqawoe.f"
+    "../scipy/integrate/quadpack/dqaws.f"
+    "../scipy/integrate/quadpack/dqawse.f"
+    "../scipy/integrate/quadpack/dqc25c.f"
+    "../scipy/integrate/quadpack/dqc25f.f"
+    "../scipy/integrate/quadpack/dqc25s.f"
+    "../scipy/integrate/quadpack/dqcheb.f"
+    "../scipy/integrate/quadpack/dqelg.f"
+    "../scipy/integrate/quadpack/dqk15.f"
+    "../scipy/integrate/quadpack/dqk15i.f"
+    "../scipy/integrate/quadpack/dqk15w.f"
+    "../scipy/integrate/quadpack/dqk21.f"
+    "../scipy/integrate/quadpack/dqk31.f"
+    "../scipy/integrate/quadpack/dqk41.f"
+    "../scipy/integrate/quadpack/dqk51.f"
+    "../scipy/integrate/quadpack/dqk61.f"
+    "../scipy/integrate/quadpack/dqmomo.f"
+    "../scipy/integrate/quadpack/dqng.f"
+    "../scipy/integrate/quadpack/dqpsrt.f"
+    "../scipy/integrate/quadpack/dqwgtc.f"
+    "../scipy/integrate/quadpack/dqwgtf.f"
+    "../scipy/integrate/quadpack/dqwgts.f"
+)
+
+SET(SOURCE_FILES_QUADPACK_RTLIB
+    "../scipy/integrate/quadpack/dqwgts.f"
+)
+
+set(SOURCE_FILES_INTEGRATE_MACH
+    "../scipy/integrate/mach/d1mach.f"
+    "../scipy/integrate/mach/xerror.f"
+)
+
+SET(SOURCE_FILES_INTEGRATE_MACH_RTLIB
+    "../scipy/integrate/mach/d1mach.f"
+)
+
 foreach(SRC ${SOURCE_FILES_MINPACK})
     set_source_files_properties(${SRC} PROPERTIES
         COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
@@ -239,6 +291,25 @@ list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
 set_source_files_properties(${SOURCE_FILES_MACH_RTLIB} PROPERTIES
     COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
 
+foreach(SRC ${SOURCE_FILES_QUADPACK})
+    set_source_files_properties(${SRC} PROPERTIES
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+endforeach()
+
+get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_QUADPACK_RTLIB} COMPILE_OPTIONS)
+list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
+set_source_files_properties(${SOURCE_FILES_QUADPACK_RTLIB} PROPERTIES
+    COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
+
+foreach(SRC ${SOURCE_FILES_INTEGRATE_MACH})
+    set_source_files_properties(${SRC} PROPERTIES
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+endforeach()
+
+get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_INTEGRATE_MACH_RTLIB} COMPILE_OPTIONS)
+list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
+set_source_files_properties(${SOURCE_FILES_INTEGRATE_MACH_RTLIB} PROPERTIES
+    COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
 
 # Create shared libraries for each component (Minpack, Fitpack, Specfun)
 add_library(minpack SHARED ${SOURCE_FILES_MINPACK})
@@ -256,6 +327,12 @@ set_target_properties(amos PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 add_library(mach SHARED ${SOURCE_FILES_MACH})
 set_target_properties(mach PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 
+add_library(quadpack SHARED ${SOURCE_FILES_QUADPACK})
+set_target_properties(quadpack PROPERTIES POSITION_INDEPENDENT_CODE OFF)
+
+add_library(integrate_mach SHARED ${SOURCE_FILES_INTEGRATE_MACH})
+set_target_properties(integrate_mach PROPERTIES POSITION_INDEPENDENT_CODE OFF)
+
 # Link the libraries
 message("${LFORTRAN_RUNTIME_LIBRARY_PATH}")
 find_library(LFORTRAN_RUNTIME_LIBRARY lfortran_runtime PATH "${LFORTRAN_RUNTIME_LIBRARY_PATH}")
@@ -267,9 +344,11 @@ target_link_libraries(specfun PRIVATE lfortran_runtime)
 target_link_libraries(fitpack PRIVATE lfortran_runtime)
 target_link_libraries(amos PRIVATE lfortran_runtime)
 target_link_libraries(mach PRIVATE lfortran_runtime)
+target_link_libraries(quadpack PRIVATE lfortran_runtime)
+target_link_libraries(integrate_mach PRIVATE lfortran_runtime)
 
 # Set C as the link language
-set_target_properties(minpack specfun fitpack amos mach PROPERTIES LINKER_LANGUAGE C)
+set_target_properties(minpack specfun fitpack amos mach quadpack integrate_mach PROPERTIES LINKER_LANGUAGE C)
 
 # Rename the shared library to have a .so extension
 set_target_properties(minpack PROPERTIES OUTPUT_NAME minpack SUFFIX ".so")
@@ -277,6 +356,8 @@ set_target_properties(specfun PROPERTIES OUTPUT_NAME specfun SUFFIX ".so")
 set_target_properties(fitpack PROPERTIES OUTPUT_NAME fitpack SUFFIX ".so")
 set_target_properties(amos PROPERTIES OUTPUT_NAME amos SUFFIX ".so")
 set_target_properties(mach PROPERTIES OUTPUT_NAME mach SUFFIX ".so")
+set_target_properties(quadpack PROPERTIES OUTPUT_NAME quadpack SUFFIX ".so")
+set_target_properties(integrate_mach PROPERTIES OUTPUT_NAME integrate_mach SUFFIX ".so")
 
 # Specify installation paths
 install(TARGETS minpack DESTINATION ${MINPACK_DIRECTORY})
@@ -293,3 +374,9 @@ install(TARGETS amos DESTINATION $ENV{CONDA_PREFIX}/lib)
 
 install(TARGETS mach DESTINATION ${SPECFUN_DIRECTORY})
 install(TARGETS mach DESTINATION $ENV{CONDA_PREFIX}/lib)
+
+install(TARGETS quadpack DESTINATION ${QUADPACK_DIRECTORY})
+install(TARGETS quadpack DESTINATION $ENV{CONDA_PREFIX}/lib)
+
+install(TARGETS integrate_mach DESTINATION ${QUADPACK_DIRECTORY})
+install(TARGETS integrate_mach DESTINATION $ENV{CONDA_PREFIX}/lib)
