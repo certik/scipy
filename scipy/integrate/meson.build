@@ -1,46 +1,3 @@
-mach_src = [
-  'mach/d1mach.f',
-  'mach/xerror.f'
-]
-
-quadpack_src = [
-  'quadpack/dqag.f',
-  'quadpack/dqage.f',
-  'quadpack/dqagi.f',
-  'quadpack/dqagie.f',
-  'quadpack/dqagp.f',
-  'quadpack/dqagpe.f',
-  'quadpack/dqags.f',
-  'quadpack/dqagse.f',
-  'quadpack/dqawc.f',
-  'quadpack/dqawce.f',
-  'quadpack/dqawf.f',
-  'quadpack/dqawfe.f',
-  'quadpack/dqawo.f',
-  'quadpack/dqawoe.f',
-  'quadpack/dqaws.f',
-  'quadpack/dqawse.f',
-  'quadpack/dqc25c.f',
-  'quadpack/dqc25f.f',
-  'quadpack/dqc25s.f',
-  'quadpack/dqcheb.f',
-  'quadpack/dqelg.f',
-  'quadpack/dqk15.f',
-  'quadpack/dqk15i.f',
-  'quadpack/dqk15w.f',
-  'quadpack/dqk21.f',
-  'quadpack/dqk31.f',
-  'quadpack/dqk41.f',
-  'quadpack/dqk51.f',
-  'quadpack/dqk61.f',
-  'quadpack/dqmomo.f',
-  'quadpack/dqng.f',
-  'quadpack/dqpsrt.f',
-  'quadpack/dqwgtc.f',
-  'quadpack/dqwgtf.f',
-  'quadpack/dqwgts.f'
-]
-
 lsoda_src = [
   'odepack/blkdta000.f',
   'odepack/bnorm.f',
@@ -73,16 +30,6 @@ quadpack_test_src = [
   'tests/_test_multivariate.c'
 ]
 
-mach_lib = static_library('mach_lib',
-  mach_src,
-  fortran_args: fortran_ignore_warnings
-)
-
-quadpack_lib = static_library('quadpack_lib',
-  quadpack_src,
-  fortran_args: fortran_ignore_warnings
-)
-
 lsoda_lib = static_library('lsoda_lib',
   lsoda_src,
   fortran_args: fortran_ignore_warnings
@@ -103,7 +50,7 @@ py3.extension_module('_quadpack',
   c_args: numpy_nodepr_api,
   fortran_args: fortran_ignore_warnings,
   include_directories: ['../_lib/src'],
-  link_with: [quadpack_lib, mach_lib],
+  objects: ['quadpack.so', 'integrate_mach.so'],
   link_args: version_link_args,
   dependencies: [lapack, np_dep],
   install: true,
@@ -115,7 +62,8 @@ py3.extension_module('_odepack',
   '_odepackmodule.c',
   c_args: numpy_nodepr_api,
   fortran_args: fortran_ignore_warnings,
-  link_with: [lsoda_lib, mach_lib],
+  objects: 'integrate_mach.so',
+  link_with: [lsoda_lib],
   link_args: version_link_args,
   dependencies: [lapack, np_dep],
   install: true,
@@ -148,7 +96,8 @@ lsoda_module = custom_target('lsoda_module',
 
 py3.extension_module('_lsoda',
   lsoda_module,
-  link_with: [lsoda_lib, mach_lib],
+  objects: 'integrate_mach.so',
+  link_with: [lsoda_lib],
   c_args: [numpy_nodepr_api, Wno_unused_variable],
   dependencies: [lapack, fortranobject_dep],
   link_args: version_link_args,
@@ -190,7 +139,8 @@ _test_odeint_banded_module = custom_target('_test_odeint_banded_module',
 py3.extension_module('_test_odeint_banded',
   ['tests/banded5x5.f', _test_odeint_banded_module],
   c_args: numpy_nodepr_api,
-  link_with: [lsoda_lib, mach_lib],
+  objects: 'integrate_mach.so',
+  link_with: [lsoda_lib],
   fortran_args: _fflag_Wno_unused_dummy_argument,
   link_args: version_link_args,
   dependencies: [lapack, fortranobject_dep],
