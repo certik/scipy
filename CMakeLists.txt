@@ -193,6 +193,77 @@ set(SOURCE_FILES_MACH
     "../scipy/special/mach/xerror.f"
 )
 
+set(SOURCE_FILES_CDFLIB
+    "../scipy/special/cdflib/algdiv.f"
+    "../scipy/special/cdflib/alngam.f"
+    "../scipy/special/cdflib/alnrel.f"
+    "../scipy/special/cdflib/apser.f"
+    "../scipy/special/cdflib/basym.f"
+    "../scipy/special/cdflib/bcorr.f"
+    "../scipy/special/cdflib/betaln.f"
+    "../scipy/special/cdflib/bfrac.f"
+    "../scipy/special/cdflib/bgrat.f"
+    "../scipy/special/cdflib/bpser.f"
+    "../scipy/special/cdflib/bratio.f"
+    "../scipy/special/cdflib/brcmp1.f"
+    "../scipy/special/cdflib/brcomp.f"
+    "../scipy/special/cdflib/bup.f"
+    "../scipy/special/cdflib/cdfbet.f"
+    "../scipy/special/cdflib/cdfbin.f"
+    "../scipy/special/cdflib/cdfchi.f"
+    "../scipy/special/cdflib/cdfchn.f"
+    "../scipy/special/cdflib/cdff.f"
+    "../scipy/special/cdflib/cdffnc.f"
+    "../scipy/special/cdflib/cdfgam.f"
+    "../scipy/special/cdflib/cdfnbn.f"
+    "../scipy/special/cdflib/cdfnor.f"
+    "../scipy/special/cdflib/cdfpoi.f"
+    "../scipy/special/cdflib/cdft.f"
+    "../scipy/special/cdflib/cdftnc.f"
+    "../scipy/special/cdflib/cumbet.f"
+    "../scipy/special/cdflib/cumbin.f"
+    "../scipy/special/cdflib/cumchi.f"
+    "../scipy/special/cdflib/cumchn.f"
+    "../scipy/special/cdflib/cumf.f"
+    "../scipy/special/cdflib/cumfnc.f"
+    "../scipy/special/cdflib/cumgam.f"
+    "../scipy/special/cdflib/cumnbn.f"
+    "../scipy/special/cdflib/cumnor.f"
+    "../scipy/special/cdflib/cumpoi.f"
+    "../scipy/special/cdflib/cumt.f"
+    "../scipy/special/cdflib/cumtnc.f"
+    "../scipy/special/cdflib/devlpl.f"
+    "../scipy/special/cdflib/dinvnr.f"
+    "../scipy/special/cdflib/dinvr.f"
+    "../scipy/special/cdflib/dt1.f"
+    "../scipy/special/cdflib/dzror.f"
+    "../scipy/special/cdflib/erf.f"
+    "../scipy/special/cdflib/erfc1.f"
+    "../scipy/special/cdflib/esum.f"
+    "../scipy/special/cdflib/exparg.f"
+    "../scipy/special/cdflib/fpser.f"
+    "../scipy/special/cdflib/gam1.f"
+    "../scipy/special/cdflib/gaminv.f"
+    "../scipy/special/cdflib/gamln.f"
+    "../scipy/special/cdflib/gamln1.f"
+    "../scipy/special/cdflib/gamma_fort.f"
+    "../scipy/special/cdflib/grat1.f"
+    "../scipy/special/cdflib/gratio.f"
+    "../scipy/special/cdflib/gsumln.f"
+    "../scipy/special/cdflib/ipmpar.f"
+    "../scipy/special/cdflib/psi_fort.f"
+    "../scipy/special/cdflib/rcomp.f"
+    "../scipy/special/cdflib/rexp.f"
+    "../scipy/special/cdflib/rlog.f"
+    "../scipy/special/cdflib/rlog1.f"
+    "../scipy/special/cdflib/spmpar.f"
+    "../scipy/special/cdflib/stvaln.f"
+)
+
+SET(SOURCE_FILES_CDFLIB_RTLIB
+    "../scipy/special/cdflib/algdiv.f"
+)
+
 foreach(SRC ${SOURCE_FILES_MINPACK})
     set_source_files_properties(${SRC} PROPERTIES
         COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
@@ -233,6 +304,17 @@ foreach(SRC ${SOURCE_FILES_MACH})
         COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
 endforeach()
 
+foreach(SRC ${SOURCE_FILES_CDFLIB})
+    set_source_files_properties(${SRC} PROPERTIES
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+endforeach()
+
+get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_CDFLIB_RTLIB} COMPILE_OPTIONS)
+list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
+set_source_files_properties(${SOURCE_FILES_CDFLIB_RTLIB} PROPERTIES
+    COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
+
+
 
 # Create shared libraries for each component (Minpack, Fitpack, Specfun)
 add_library(minpack SHARED ${SOURCE_FILES_MINPACK})
@@ -250,6 +332,9 @@ set_target_properties(amos PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 add_library(mach SHARED ${SOURCE_FILES_MACH})
 set_target_properties(mach PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 
+add_library(cdflib SHARED ${SOURCE_FILES_CDFLIB})
+set_target_properties(cdflib PROPERTIES POSITION_INDEPENDENT_CODE OFF)
+
 # Link the libraries
 message("${LFORTRAN_RUNTIME_LIBRARY_PATH}")
 find_library(LFORTRAN_RUNTIME_LIBRARY lfortran_runtime PATH "${LFORTRAN_RUNTIME_LIBRARY_PATH}")
@@ -261,9 +346,10 @@ target_link_libraries(specfun PRIVATE lfortran_runtime)
 target_link_libraries(fitpack PRIVATE lfortran_runtime)
 target_link_libraries(amos PRIVATE lfortran_runtime)
 target_link_libraries(mach PRIVATE lfortran_runtime)
+target_link_libraries(cdflib PRIVATE lfortran_runtime)
 
 # Set C as the link language
-set_target_properties(minpack specfun fitpack amos mach PROPERTIES LINKER_LANGUAGE C)
+set_target_properties(minpack specfun fitpack amos mach cdflib PROPERTIES LINKER_LANGUAGE C)
 
 # Rename the shared library to have a .so extension
 set_target_properties(minpack PROPERTIES OUTPUT_NAME minpack SUFFIX ".so")
@@ -271,6 +357,7 @@ set_target_properties(specfun PROPERTIES OUTPUT_NAME specfun SUFFIX ".so")
 set_target_properties(fitpack PROPERTIES OUTPUT_NAME fitpack SUFFIX ".so")
 set_target_properties(amos PROPERTIES OUTPUT_NAME amos SUFFIX ".so")
 set_target_properties(mach PROPERTIES OUTPUT_NAME mach SUFFIX ".so")
+set_target_properties(cdflib PROPERTIES OUTPUT_NAME cdflib SUFFIX ".so")
 
 # Specify installation paths
 install(TARGETS minpack DESTINATION ${MINPACK_DIRECTORY})
@@ -287,3 +374,6 @@ install(TARGETS amos DESTINATION $ENV{CONDA_PREFIX}/lib)
 
 install(TARGETS mach DESTINATION ${SPECFUN_DIRECTORY})
 install(TARGETS mach DESTINATION $ENV{CONDA_PREFIX}/lib)
+
+install(TARGETS cdflib DESTINATION ${SPECFUN_DIRECTORY})
+install(TARGETS cdflib DESTINATION $ENV{CONDA_PREFIX}/lib)
