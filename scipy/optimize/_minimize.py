@@ -38,12 +38,12 @@ from ._constraints import (old_bound_to_new, new_bounds_to_old,
 from ._differentiable_functions import FD_METHODS
 
 MINIMIZE_METHODS = ['nelder-mead', 'powell', 'cg', 'bfgs', 'newton-cg',
-                    'l-bfgs-b', 'tnc', 'cobyla', 'slsqp', 'trust-constr',
+                     'tnc', 'cobyla', 'slsqp', 'trust-constr',
                     'dogleg', 'trust-ncg', 'trust-exact', 'trust-krylov']
 
 # These methods support the new callback interface (passed an OptimizeResult)
 MINIMIZE_METHODS_NEW_CB = ['nelder-mead', 'powell', 'cg', 'bfgs', 'newton-cg',
-                           'l-bfgs-b', 'trust-constr', 'dogleg', 'trust-ncg',
+                            'trust-constr', 'dogleg', 'trust-ncg',
                            'trust-exact', 'trust-krylov']
 
 MINIMIZE_SCALAR_METHODS = ['brent', 'bounded', 'golden']

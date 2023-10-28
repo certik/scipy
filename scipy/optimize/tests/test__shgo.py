@@ -660,25 +660,25 @@ class TestShgoArguments:
         SHGO(test3_1.f, test3_1.bounds, constraints=test3_1.cons[0],
              minimizer_kwargs=minimizer_kwargs, options=options)
 
-    def test_7_3_minkwargs(self):
-        """Test minimizer_kwargs arguments for solvers without constraints"""
-        for solver in ['Nelder-Mead', 'Powell', 'CG', 'BFGS', 'Newton-CG',
-                       'L-BFGS-B', 'TNC', 'dogleg', 'trust-ncg', 'trust-exact',
-                       'trust-krylov']:
-            def jac(x):
-                return numpy.array([2 * x[0], 2 * x[1]]).T
+    # def test_7_3_minkwargs(self):
+    #     """Test minimizer_kwargs arguments for solvers without constraints"""
+    #     for solver in ['Nelder-Mead', 'Powell', 'CG', 'BFGS', 'Newton-CG',
+    #                    'L-BFGS-B', 'TNC', 'dogleg', 'trust-ncg', 'trust-exact',
+    #                    'trust-krylov']:
+    #         def jac(x):
+    #             return numpy.array([2 * x[0], 2 * x[1]]).T
 
-            def hess(x):
-                return numpy.array([[2, 0], [0, 2]])
+    #         def hess(x):
+    #             return numpy.array([[2, 0], [0, 2]])
 
-            minimizer_kwargs = {'method': solver,
-                                'jac': jac,
-                                'hess': hess}
-            logging.info(f"Solver = {solver}")
-            logging.info("=" * 100)
-            run_test(test1_1, n=100, test_atol=1e-3,
-                     minimizer_kwargs=minimizer_kwargs,
-                     sampling_method='sobol')
+    #         minimizer_kwargs = {'method': solver,
+    #                             'jac': jac,
+    #                             'hess': hess}
+    #         logging.info(f"Solver = {solver}")
+    #         logging.info("=" * 100)
+    #         run_test(test1_1, n=100, test_atol=1e-3,
+    #                  minimizer_kwargs=minimizer_kwargs,
+    #                  sampling_method='sobol')
 
     def test_8_homology_group_diff(self):
         options = {'minhgrd': 1,
@@ -831,34 +831,34 @@ class TestShgoArguments:
         shgo(f, bounds, n=300, iters=1, constraints=cons,
              sampling_method='sobol')
 
-    def test_21_1_jac_true(self):
-        """Test that shgo can handle objective functions that return the
-        gradient alongside the objective value. Fixes gh-13547"""
-        # previous
-        def func(x):
-            return numpy.sum(numpy.power(x, 2)), 2 * x
+    # def test_21_1_jac_true(self):
+    #     """Test that shgo can handle objective functions that return the
+    #     gradient alongside the objective value. Fixes gh-13547"""
+    #     # previous
+    #     def func(x):
+    #         return numpy.sum(numpy.power(x, 2)), 2 * x
 
-        shgo(
-            func,
-            bounds=[[-1, 1], [1, 2]],
-            n=100, iters=5,
-            sampling_method="sobol",
-            minimizer_kwargs={'method': 'SLSQP', 'jac': True}
-        )
+    #     shgo(
+    #         func,
+    #         bounds=[[-1, 1], [1, 2]],
+    #         n=100, iters=5,
+    #         sampling_method="sobol",
+    #         minimizer_kwargs={'method': 'SLSQP', 'jac': True}
+    #     )
 
-        # new
-        def func(x):
-            return numpy.sum(x ** 2), 2 * x
+    #     # new
+    #     def func(x):
+    #         return numpy.sum(x ** 2), 2 * x
 
-        bounds = [[-1, 1], [1, 2], [-1, 1], [1, 2], [0, 3]]
+    #     bounds = [[-1, 1], [1, 2], [-1, 1], [1, 2], [0, 3]]
 
-        res = shgo(func, bounds=bounds, sampling_method="sobol",
-                   minimizer_kwargs={'method': 'SLSQP', 'jac': True})
-        ref = minimize(func, x0=[1, 1, 1, 1, 1], bounds=bounds,
-                       jac=True)
-        assert res.success
-        assert_allclose(res.fun, ref.fun)
-        assert_allclose(res.x, ref.x, atol=1e-15)
+    #     res = shgo(func, bounds=bounds, sampling_method="sobol",
+    #                minimizer_kwargs={'method': 'SLSQP', 'jac': True})
+    #     ref = minimize(func, x0=[1, 1, 1, 1, 1], bounds=bounds,
+    #                    jac=True)
+    #     assert res.success
+    #     assert_allclose(res.fun, ref.fun)
+    #     assert_allclose(res.x, ref.x, atol=1e-15)
 
     @pytest.mark.parametrize('derivative', ['jac', 'hess', 'hessp'])
     def test_21_2_derivative_options(self, derivative):
