@@ -101,10 +101,10 @@ lbfgsb_module = custom_target('lbfgsb_module',
 
 _lbfgsb = py3.extension_module('_lbfgsb',
   [
-    'lbfgsb_src/lbfgsb.f',
-    'lbfgsb_src/linpack.f',
-    'lbfgsb_src/timer.f',
     lbfgsb_module,
+  ],
+  objects: [
+    'lbfgsb_src.so'
   ],
   c_args: numpy_nodepr_api,
   fortran_args: fortran_ignore_warnings,
