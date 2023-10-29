@@ -123,7 +123,8 @@ minpack2_module = custom_target('minpack2_module',
 )
 
 minpack2 = py3.extension_module('_minpack2',
-  [minpack2_module, 'minpack2/dcsrch.f', 'minpack2/dcstep.f'],
+  [minpack2_module],
+  objects: 'minpack2.so',
   c_args: numpy_nodepr_api,
   fortran_args: fortran_ignore_warnings,
   link_args: version_link_args,
