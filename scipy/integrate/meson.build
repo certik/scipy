@@ -1,8 +1,3 @@
-mach_src = [
-  'mach/d1mach.f',
-  'mach/xerror.f'
-]
-
 quadpack_src = [
   'quadpack/dqag.f',
   'quadpack/dqage.f',
@@ -73,11 +68,6 @@ quadpack_test_src = [
   'tests/_test_multivariate.c'
 ]
 
-mach_lib = static_library('mach_lib',
-  mach_src,
-  fortran_args: fortran_ignore_warnings
-)
-
 quadpack_lib = static_library('quadpack_lib',
   quadpack_src,
   fortran_args: fortran_ignore_warnings
@@ -103,7 +93,8 @@ py3.extension_module('_quadpack',
   c_args: numpy_nodepr_api,
   fortran_args: fortran_ignore_warnings,
   include_directories: ['../_lib/src'],
-  link_with: [quadpack_lib, mach_lib],
+  link_with: [quadpack_lib],
+  objects: ['mach_integrate.so'],
   link_args: version_link_args,
   dependencies: [lapack, np_dep],
   install: true,
@@ -115,7 +106,8 @@ py3.extension_module('_odepack',
   '_odepackmodule.c',
   c_args: numpy_nodepr_api,
   fortran_args: fortran_ignore_warnings,
-  link_with: [lsoda_lib, mach_lib],
+  link_with: [lsoda_lib],
+  objects: ['mach_integrate.so'],
   link_args: version_link_args,
   dependencies: [lapack, np_dep],
   install: true,
@@ -148,7 +140,8 @@ lsoda_module = custom_target('lsoda_module',
 
 py3.extension_module('_lsoda',
   lsoda_module,
-  link_with: [lsoda_lib, mach_lib],
+  link_with: [lsoda_lib],
+  objects: ['mach_integrate.so'],
   c_args: [numpy_nodepr_api, Wno_unused_variable],
   dependencies: [lapack, fortranobject_dep],
   link_args: version_link_args,
@@ -190,7 +183,8 @@ _test_odeint_banded_module = custom_target('_test_odeint_banded_module',
 py3.extension_module('_test_odeint_banded',
   ['tests/banded5x5.f', _test_odeint_banded_module],
   c_args: numpy_nodepr_api,
-  link_with: [lsoda_lib, mach_lib],
+  link_with: [lsoda_lib],
+  objects: ['mach_integrate.so'],
   fortran_args: _fflag_Wno_unused_dummy_argument,
   link_args: version_link_args,
   dependencies: [lapack, fortranobject_dep],
