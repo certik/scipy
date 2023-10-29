@@ -64,11 +64,6 @@ vode_src = [
   'odepack/zvode.f'
 ]
 
-dop_src = [
-  'dop/dop853.f',
-  'dop/dopri5.f'
-]
-
 quadpack_test_src = [
   'tests/_test_multivariate.c'
 ]
@@ -90,11 +85,6 @@ lsoda_lib = static_library('lsoda_lib',
 
 vode_lib = static_library('vode_lib',
   vode_src,
-  fortran_args: fortran_ignore_warnings
-)
-
-dop_lib = static_library('dop_lib',
-  dop_src,
   fortran_args: fortran_ignore_warnings
 )
 
@@ -165,7 +155,7 @@ _dop_module = custom_target('_dop_module',
 
 py3.extension_module('_dop',
   _dop_module,
-  link_with: [dop_lib],
+  objects: 'dop.so',
   c_args: [numpy_nodepr_api, Wno_unused_variable],
   dependencies: [fortranobject_dep],
   link_args: version_link_args,
