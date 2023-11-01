@@ -10,6 +10,7 @@ set(SPECFUN_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/special/)
 set(MINPACK_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/optimize/)
 set(FITPACK_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/interpolate/)
 set(INTEGRATE_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/integrate/)
+set(ODRPACK_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/odr/)
 
 
 
@@ -280,10 +281,21 @@ SET(SOURCE_FILES_MACH_INTEGRATE
     "../scipy/integrate/mach/xerror.f"
 )
 
-SET(SOURCE_FILES_MACH_INTEGRATE_RTLIB
+SET(SOURCE_FILES_MACH_RTLIB
     "../scipy/integrate/mach/d1mach.f"
 )
 
+set(SOURCE_FILES_ODRPACK
+    "../scipy/odr/odrpack/d_lpk.f"
+    "../scipy/odr/odrpack/d_mprec.f"
+    "../scipy/odr/odrpack/d_odr.f"
+    "../scipy/odr/odrpack/d_test.f"
+    "../scipy/odr/odrpack/dlunoc.f"
+)
+
+SET(SOURCE_FILES_ODRPACK_RTLIB
+    "../scipy/odr/odrpack/d_mprec.f"
+)
 
 foreach(SRC ${SOURCE_FILES_MINPACK})
     set_source_files_properties(${SRC} PROPERTIES
@@ -325,6 +337,11 @@ foreach(SRC ${SOURCE_FILES_MACH})
         COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
 endforeach()
 
+get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_MACH_RTLIB} COMPILE_OPTIONS)
+list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
+set_source_files_properties(${SOURCE_FILES_MACH_RTLIB} PROPERTIES
+    COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
+
 foreach(SRC ${SOURCE_FILES_CDFLIB})
     set_source_files_properties(${SRC} PROPERTIES
         COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
@@ -345,16 +362,25 @@ list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
 set_source_files_properties(${SOURCE_FILES_MINPACK2_RTLIB} PROPERTIES
     COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
 
-    foreach(SRC ${SOURCE_FILES_MACH_INTEGRATE})
+foreach(SRC ${SOURCE_FILES_MACH_INTEGRATE})
     set_source_files_properties(${SRC} PROPERTIES
         COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
 endforeach()
 
-get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_MACH_INTEGRATE_RTLIB} COMPILE_OPTIONS)
+get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_MACH_RTLIB} COMPILE_OPTIONS)
 list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
-set_source_files_properties(${SOURCE_FILES_MACH_INTEGRATE_RTLIB} PROPERTIES
+set_source_files_properties(${SOURCE_FILES_MACH_RTLIB} PROPERTIES
     COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
 
+foreach(SRC ${SOURCE_FILES_ODRPACK})
+    set_source_files_properties(${SRC} PROPERTIES
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+endforeach()
+
+get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_ODRPACK_RTLIB} COMPILE_OPTIONS)
+list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
+set_source_files_properties(${SOURCE_FILES_ODRPACK_RTLIB} PROPERTIES
+    COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
 
 # Create shared libraries for each component (Minpack, Fitpack, Specfun)
 add_library(minpack SHARED ${SOURCE_FILES_MINPACK})
@@ -381,6 +407,8 @@ set_target_properties(minpack2 PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 add_library(mach_integrate SHARED ${SOURCE_FILES_MACH_INTEGRATE})
 set_target_properties(mach_integrate PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 
+add_library(odrpack SHARED ${SOURCE_FILES_ODRPACK})
+set_target_properties(odrpack PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 # Link the libraries
 message("${LFORTRAN_RUNTIME_LIBRARY_PATH}")
 find_library(LFORTRAN_RUNTIME_LIBRARY lfortran_runtime PATH "${LFORTRAN_RUNTIME_LIBRARY_PATH}")
@@ -395,10 +423,10 @@ target_link_libraries(mach PRIVATE lfortran_runtime)
 target_link_libraries(cdflib PRIVATE lfortran_runtime)
 target_link_libraries(minpack2 PRIVATE lfortran_runtime)
 target_link_libraries(mach_integrate PRIVATE lfortran_runtime)
-
+target_link_libraries(odrpack PRIVATE lfortran_runtime)
 
 # Set C as the link language
-set_target_properties(minpack specfun fitpack amos mach cdflib minpack2 mach_integrate PROPERTIES LINKER_LANGUAGE C)
+set_target_properties(minpack specfun fitpack amos mach cdflib minpack2 mach_integrate odrpack PROPERTIES LINKER_LANGUAGE C)
 
 # Rename the shared library to have a .so extension
 set_target_properties(minpack PROPERTIES OUTPUT_NAME minpack SUFFIX ".so")
@@ -409,7 +437,7 @@ set_target_properties(mach PROPERTIES OUTPUT_NAME mach SUFFIX ".so")
 set_target_properties(cdflib PROPERTIES OUTPUT_NAME cdflib SUFFIX ".so")
 set_target_properties(minpack2 PROPERTIES OUTPUT_NAME minpack2 SUFFIX ".so")
 set_target_properties(mach_integrate PROPERTIES OUTPUT_NAME mach_integrate SUFFIX ".so")
-
+set_target_properties(odrpack PROPERTIES OUTPUT_NAME odrpack SUFFIX ".so")
 
 # Specify installation paths
 install(TARGETS minpack DESTINATION ${MINPACK_DIRECTORY})
@@ -435,3 +463,6 @@ install(TARGETS minpack2 DESTINATION $ENV{CONDA_PREFIX}/lib)
 
 install(TARGETS mach_integrate DESTINATION ${INTEGRATE_DIRECTORY})
 install(TARGETS mach_integrate DESTINATION $ENV{CONDA_PREFIX}/lib)
+
+install(TARGETS odrpack DESTINATION ${ODRPACK_DIRECTORY})
+install(TARGETS odrpack DESTINATION $ENV{CONDA_PREFIX}/lib)
