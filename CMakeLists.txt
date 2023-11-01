@@ -10,6 +10,7 @@ set(SPECFUN_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/special/)
 set(MINPACK_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/optimize/)
 set(FITPACK_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/interpolate/)
 set(INTEGRATE_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/integrate/)
+set(SPARSE_DIRECTORY ${CMAKE_BINARY_DIR}/../scipy/sparse/)
 
 
 
@@ -284,6 +285,93 @@ SET(SOURCE_FILES_MACH_INTEGRATE_RTLIB
     "../scipy/integrate/mach/d1mach.f"
 )
 
+SET(SOURCE_FILES_ARPACK
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/cgetv0.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/cnaitr.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/cnapps.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/cnaup2.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/cnaupd.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/cneigh.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/cneupd.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/cngets.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/csortc.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/cstatn.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dgetv0.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dnaitr.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dnapps.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dnaup2.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dnaupd.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dnconv.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dneigh.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dneupd.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dngets.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dsaitr.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dsapps.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dsaup2.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dsaupd.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dsconv.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dseigt.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dsesrt.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dseupd.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dsgets.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dsortc.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dsortr.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dstatn.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dstats.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/dstqrb.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/sgetv0.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/snaitr.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/snapps.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/snaup2.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/snaupd.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/snconv.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/sneigh.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/sneupd.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/sngets.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/ssaitr.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/ssapps.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/ssaup2.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/ssaupd.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/ssconv.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/sseigt.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/ssesrt.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/sseupd.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/ssgets.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/ssortc.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/ssortr.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/sstatn.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/sstats.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/sstqrb.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/zgetv0.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/znaitr.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/znapps.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/znaup2.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/znaupd.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/zneigh.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/zneupd.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/zngets.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/zsortc.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/zstatn.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/UTIL/cmout.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/UTIL/cvout.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/UTIL/dmout.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/UTIL/dvout.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/UTIL/icnteq.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/UTIL/icopy.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/UTIL/iset.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/UTIL/iswap.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/UTIL/ivout.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/UTIL/second_NONE.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/UTIL/smout.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/UTIL/svout.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/UTIL/zmout.f"
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/UTIL/zvout.f"
+)
+
+SET(SOURCE_FILES_ARPACK_RTLIB
+    "../scipy/sparse/linalg/_eigen/arpack/ARPACK/SRC/cgetv0.f"
+)
+
 
 foreach(SRC ${SOURCE_FILES_MINPACK})
     set_source_files_properties(${SRC} PROPERTIES
@@ -345,7 +433,7 @@ list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
 set_source_files_properties(${SOURCE_FILES_MINPACK2_RTLIB} PROPERTIES
     COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
 
-    foreach(SRC ${SOURCE_FILES_MACH_INTEGRATE})
+foreach(SRC ${SOURCE_FILES_MACH_INTEGRATE})
     set_source_files_properties(${SRC} PROPERTIES
         COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
 endforeach()
@@ -355,6 +443,15 @@ list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
 set_source_files_properties(${SOURCE_FILES_MACH_INTEGRATE_RTLIB} PROPERTIES
     COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
 
+foreach(SRC ${SOURCE_FILES_ARPACK})
+    set_source_files_properties(${SRC} PROPERTIES
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+endforeach()
+
+get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_ARPACK_RTLIB} COMPILE_OPTIONS)
+list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
+set_source_files_properties(${SOURCE_FILES_ARPACK_RTLIB} PROPERTIES
+    COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
 
 # Create shared libraries for each component (Minpack, Fitpack, Specfun)
 add_library(minpack SHARED ${SOURCE_FILES_MINPACK})
@@ -381,6 +478,9 @@ set_target_properties(minpack2 PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 add_library(mach_integrate SHARED ${SOURCE_FILES_MACH_INTEGRATE})
 set_target_properties(mach_integrate PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 
+add_library(arpack SHARED ${SOURCE_FILES_ARPACK})
+set_target_properties(arpack PROPERTIES POSITION_INDEPENDENT_CODE OFF)
+
 # Link the libraries
 message("${LFORTRAN_RUNTIME_LIBRARY_PATH}")
 find_library(LFORTRAN_RUNTIME_LIBRARY lfortran_runtime PATH "${LFORTRAN_RUNTIME_LIBRARY_PATH}")
@@ -395,10 +495,11 @@ target_link_libraries(mach PRIVATE lfortran_runtime)
 target_link_libraries(cdflib PRIVATE lfortran_runtime)
 target_link_libraries(minpack2 PRIVATE lfortran_runtime)
 target_link_libraries(mach_integrate PRIVATE lfortran_runtime)
+target_link_libraries(arpack PRIVATE lfortran_runtime)
 
 
 # Set C as the link language
-set_target_properties(minpack specfun fitpack amos mach cdflib minpack2 mach_integrate PROPERTIES LINKER_LANGUAGE C)
+set_target_properties(minpack specfun fitpack amos mach cdflib minpack2 mach_integrate arpack PROPERTIES LINKER_LANGUAGE C)
 
 # Rename the shared library to have a .so extension
 set_target_properties(minpack PROPERTIES OUTPUT_NAME minpack SUFFIX ".so")
@@ -409,6 +510,7 @@ set_target_properties(mach PROPERTIES OUTPUT_NAME mach SUFFIX ".so")
 set_target_properties(cdflib PROPERTIES OUTPUT_NAME cdflib SUFFIX ".so")
 set_target_properties(minpack2 PROPERTIES OUTPUT_NAME minpack2 SUFFIX ".so")
 set_target_properties(mach_integrate PROPERTIES OUTPUT_NAME mach_integrate SUFFIX ".so")
+set_target_properties(arpack PROPERTIES OUTPUT_NAME arpack SUFFIX ".so")
 
 
 # Specify installation paths
@@ -435,3 +537,6 @@ install(TARGETS minpack2 DESTINATION $ENV{CONDA_PREFIX}/lib)
 
 install(TARGETS mach_integrate DESTINATION ${INTEGRATE_DIRECTORY})
 install(TARGETS mach_integrate DESTINATION $ENV{CONDA_PREFIX}/lib)
+
+install(TARGETS arpack DESTINATION ${SPARSE_DIRECTORY})
+install(TARGETS arpack DESTINATION $ENV{CONDA_PREFIX}/lib)
