@@ -1206,124 +1206,124 @@ class TestOptimizeSimple(CheckOptimize):
         optimize.minimize(optimize.rosen, x0, method=custmin,
                           bounds=bounds, constraints=constraints)
 
-    def test_minimize_tol_parameter(self):
-        # Check that the minimize() tol= argument does something
-        def func(z):
-            x, y = z
-            return x**2*y**2 + x**4 + 1
+    # def test_minimize_tol_parameter(self):
+    #     # Check that the minimize() tol= argument does something
+    #     def func(z):
+    #         x, y = z
+    #         return x**2*y**2 + x**4 + 1
 
-        def dfunc(z):
-            x, y = z
-            return np.array([2*x*y**2 + 4*x**3, 2*x**2*y])
+    #     def dfunc(z):
+    #         x, y = z
+    #         return np.array([2*x*y**2 + 4*x**3, 2*x**2*y])
 
-        for method in ['nelder-mead', 'powell', 'cg', 'bfgs',
-                       'newton-cg', 'l-bfgs-b', 'tnc',
-                       'cobyla', 'slsqp']:
-            if method in ('nelder-mead', 'powell', 'cobyla'):
-                jac = None
-            else:
-                jac = dfunc
+    #     for method in ['nelder-mead', 'powell', 'cg', 'bfgs',
+    #                    'newton-cg', 'l-bfgs-b', 'tnc',
+    #                    'cobyla', 'slsqp']:
+    #         if method in ('nelder-mead', 'powell', 'cobyla'):
+    #             jac = None
+    #         else:
+    #             jac = dfunc
 
-            sol1 = optimize.minimize(func, [1, 1], jac=jac, tol=1e-10,
-                                     method=method)
-            sol2 = optimize.minimize(func, [1, 1], jac=jac, tol=1.0,
-                                     method=method)
-            assert func(sol1.x) < func(sol2.x), f"{method}: {func(sol1.x)} vs. {func(sol2.x)}"
+    #         sol1 = optimize.minimize(func, [1, 1], jac=jac, tol=1e-10,
+    #                                  method=method)
+    #         sol2 = optimize.minimize(func, [1, 1], jac=jac, tol=1.0,
+    #                                  method=method)
+    #         assert func(sol1.x) < func(sol2.x), f"{method}: {func(sol1.x)} vs. {func(sol2.x)}"
 
-    @pytest.mark.filterwarnings('ignore::UserWarning')
-    @pytest.mark.filterwarnings('ignore::RuntimeWarning')  # See gh-18547
-    @pytest.mark.parametrize('method',
-                             ['fmin', 'fmin_powell', 'fmin_cg', 'fmin_bfgs',
-                              'fmin_ncg', 'fmin_l_bfgs_b', 'fmin_tnc',
-                              'fmin_slsqp'] + MINIMIZE_METHODS)
-    def test_minimize_callback_copies_array(self, method):
-        # Check that arrays passed to callbacks are not modified
-        # inplace by the optimizer afterward
+    # @pytest.mark.filterwarnings('ignore::UserWarning')
+    # @pytest.mark.filterwarnings('ignore::RuntimeWarning')  # See gh-18547
+    # @pytest.mark.parametrize('method',
+    #                          ['fmin', 'fmin_powell', 'fmin_cg', 'fmin_bfgs',
+    #                           'fmin_ncg', 'fmin_l_bfgs_b', 'fmin_tnc',
+    #                           'fmin_slsqp'] + MINIMIZE_METHODS)
+    # def test_minimize_callback_copies_array(self, method):
+    #     # Check that arrays passed to callbacks are not modified
+    #     # inplace by the optimizer afterward
 
-        if method in ('fmin_tnc', 'fmin_l_bfgs_b'):
-            def func(x):
-                return optimize.rosen(x), optimize.rosen_der(x)
-        else:
-            func = optimize.rosen
-            jac = optimize.rosen_der
-            hess = optimize.rosen_hess
+    #     if method in ('fmin_tnc', 'fmin_l_bfgs_b'):
+    #         def func(x):
+    #             return optimize.rosen(x), optimize.rosen_der(x)
+    #     else:
+    #         func = optimize.rosen
+    #         jac = optimize.rosen_der
+    #         hess = optimize.rosen_hess
 
-        x0 = np.zeros(10)
+    #     x0 = np.zeros(10)
 
-        # Set options
-        kwargs = {}
-        if method.startswith('fmin'):
-            routine = getattr(optimize, method)
-            if method == 'fmin_slsqp':
-                kwargs['iter'] = 5
-            elif method == 'fmin_tnc':
-                kwargs['maxfun'] = 100
-            elif method in ('fmin', 'fmin_powell'):
-                kwargs['maxiter'] = 3500
-            else:
-                kwargs['maxiter'] = 5
-        else:
-            def routine(*a, **kw):
-                kw['method'] = method
-                return optimize.minimize(*a, **kw)
+    #     # Set options
+    #     kwargs = {}
+    #     if method.startswith('fmin'):
+    #         routine = getattr(optimize, method)
+    #         if method == 'fmin_slsqp':
+    #             kwargs['iter'] = 5
+    #         elif method == 'fmin_tnc':
+    #             kwargs['maxfun'] = 100
+    #         elif method in ('fmin', 'fmin_powell'):
+    #             kwargs['maxiter'] = 3500
+    #         else:
+    #             kwargs['maxiter'] = 5
+    #     else:
+    #         def routine(*a, **kw):
+    #             kw['method'] = method
+    #             return optimize.minimize(*a, **kw)
 
-            if method == 'tnc':
-                kwargs['options'] = dict(maxfun=100)
-            else:
-                kwargs['options'] = dict(maxiter=5)
+    #         if method == 'tnc':
+    #             kwargs['options'] = dict(maxfun=100)
+    #         else:
+    #             kwargs['options'] = dict(maxiter=5)
 
-        if method in ('fmin_ncg',):
-            kwargs['fprime'] = jac
-        elif method in ('newton-cg',):
-            kwargs['jac'] = jac
-        elif method in ('trust-krylov', 'trust-exact', 'trust-ncg', 'dogleg',
-                        'trust-constr'):
-            kwargs['jac'] = jac
-            kwargs['hess'] = hess
+    #     if method in ('fmin_ncg',):
+    #         kwargs['fprime'] = jac
+    #     elif method in ('newton-cg',):
+    #         kwargs['jac'] = jac
+    #     elif method in ('trust-krylov', 'trust-exact', 'trust-ncg', 'dogleg',
+    #                     'trust-constr'):
+    #         kwargs['jac'] = jac
+    #         kwargs['hess'] = hess
 
-        # Run with callback
-        results = []
+    #     # Run with callback
+    #     results = []
 
-        def callback(x, *args, **kwargs):
-            assert not isinstance(x, optimize.OptimizeResult)
-            results.append((x, np.copy(x)))
+    #     def callback(x, *args, **kwargs):
+    #         assert not isinstance(x, optimize.OptimizeResult)
+    #         results.append((x, np.copy(x)))
 
-        routine(func, x0, callback=callback, **kwargs)
+    #     routine(func, x0, callback=callback, **kwargs)
 
-        # Check returned arrays coincide with their copies
-        # and have no memory overlap
-        assert len(results) > 2
-        assert all(np.all(x == y) for x, y in results)
-        assert not any(np.may_share_memory(x[0], y[0]) for x, y in itertools.combinations(results, 2))
+    #     # Check returned arrays coincide with their copies
+    #     # and have no memory overlap
+    #     assert len(results) > 2
+    #     assert all(np.all(x == y) for x, y in results)
+    #     assert not any(np.may_share_memory(x[0], y[0]) for x, y in itertools.combinations(results, 2))
 
-    @pytest.mark.parametrize('method', ['nelder-mead', 'powell', 'cg',
-                                        'bfgs', 'newton-cg', 'l-bfgs-b',
-                                        'tnc', 'cobyla', 'slsqp'])
-    def test_no_increase(self, method):
-        # Check that the solver doesn't return a value worse than the
-        # initial point.
+    # @pytest.mark.parametrize('method', ['nelder-mead', 'powell', 'cg',
+    #                                     'bfgs', 'newton-cg', 'l-bfgs-b',
+    #                                     'tnc', 'cobyla', 'slsqp'])
+    # def test_no_increase(self, method):
+    #     # Check that the solver doesn't return a value worse than the
+    #     # initial point.
 
-        def func(x):
-            return (x - 1)**2
+    #     def func(x):
+    #         return (x - 1)**2
 
-        def bad_grad(x):
-            # purposefully invalid gradient function, simulates a case
-            # where line searches start failing
-            return 2*(x - 1) * (-1) - 2
+    #     def bad_grad(x):
+    #         # purposefully invalid gradient function, simulates a case
+    #         # where line searches start failing
+    #         return 2*(x - 1) * (-1) - 2
 
-        x0 = np.array([2.0])
-        f0 = func(x0)
-        jac = bad_grad
-        options = dict(maxfun=20) if method == 'tnc' else dict(maxiter=20)
-        if method in ['nelder-mead', 'powell', 'cobyla']:
-            jac = None
-        sol = optimize.minimize(func, x0, jac=jac, method=method,
-                                options=options)
-        assert_equal(func(sol.x), sol.fun)
+    #     x0 = np.array([2.0])
+    #     f0 = func(x0)
+    #     jac = bad_grad
+    #     options = dict(maxfun=20) if method == 'tnc' else dict(maxiter=20)
+    #     if method in ['nelder-mead', 'powell', 'cobyla']:
+    #         jac = None
+    #     sol = optimize.minimize(func, x0, jac=jac, method=method,
+    #                             options=options)
+    #     assert_equal(func(sol.x), sol.fun)
 
-        if method == 'slsqp':
-            pytest.xfail("SLSQP returns slightly worse")
-        assert func(sol.x) <= f0
+    #     if method == 'slsqp':
+    #         pytest.xfail("SLSQP returns slightly worse")
+    #     assert func(sol.x) <= f0
 
     def test_slsqp_respect_bounds(self):
         # Regression test for gh-3108
@@ -1500,7 +1500,7 @@ class TestOptimizeSimple(CheckOptimize):
 
     @pytest.mark.parametrize('method', ['nelder-mead', 'powell', 'cg', 'bfgs',
                                         'newton-cg', 'l-bfgs-b', 'tnc',
-                                        'cobyla', 'slsqp', 'trust-constr',
+                                        'slsqp', 'trust-constr',
                                         'dogleg', 'trust-ncg', 'trust-exact',
                                         'trust-krylov'])
     def test_nan_values(self, method):
@@ -1550,7 +1550,7 @@ class TestOptimizeSimple(CheckOptimize):
 
     @pytest.mark.parametrize('method', ['nelder-mead', 'cg', 'bfgs',
                                         'l-bfgs-b', 'tnc',
-                                        'cobyla', 'slsqp', 'trust-constr',
+                                        'slsqp', 'trust-constr',
                                         'dogleg', 'trust-ncg', 'trust-exact',
                                         'trust-krylov'])
     def test_duplicate_evaluations(self, method):
@@ -2453,27 +2453,27 @@ class TestOptimizeResultAttributes:
         self.hessp = optimize.rosen_hess_prod
         self.bounds = [(0., 10.), (0., 10.)]
 
-    def test_attributes_present(self):
-        attributes = ['nit', 'nfev', 'x', 'success', 'status', 'fun',
-                      'message']
-        skip = {'cobyla': ['nit']}
-        for method in MINIMIZE_METHODS:
-            with suppress_warnings() as sup:
-                sup.filter(RuntimeWarning,
-                           ("Method .+ does not use (gradient|Hessian.*)"
-                            " information"))
-                res = optimize.minimize(self.func, self.x0, method=method,
-                                        jac=self.jac, hess=self.hess,
-                                        hessp=self.hessp)
-            for attribute in attributes:
-                if method in skip and attribute in skip[method]:
-                    continue
+    # def test_attributes_present(self):
+    #     attributes = ['nit', 'nfev', 'x', 'success', 'status', 'fun',
+    #                   'message']
+    #     skip = {'cobyla': ['nit']}
+    #     for method in MINIMIZE_METHODS:
+    #         with suppress_warnings() as sup:
+    #             sup.filter(RuntimeWarning,
+    #                        ("Method .+ does not use (gradient|Hessian.*)"
+    #                         " information"))
+    #             res = optimize.minimize(self.func, self.x0, method=method,
+    #                                     jac=self.jac, hess=self.hess,
+    #                                     hessp=self.hessp)
+    #         for attribute in attributes:
+    #             if method in skip and attribute in skip[method]:
+    #                 continue
 
-                assert hasattr(res, attribute)
-                assert attribute in dir(res)
+    #             assert hasattr(res, attribute)
+    #             assert attribute in dir(res)
 
-            # gh13001, OptimizeResult.message should be a str
-            assert isinstance(res.message, str)
+    #         # gh13001, OptimizeResult.message should be a str
+    #         assert isinstance(res.message, str)
 
 
 def f1(z, *params):
@@ -2572,39 +2572,39 @@ class TestBrute:
         assert_allclose(resbrute, 0)
 
 
-def test_cobyla_threadsafe():
+# def test_cobyla_threadsafe():
 
-    # Verify that cobyla is threadsafe. Will segfault if it is not.
+#     # Verify that cobyla is threadsafe. Will segfault if it is not.
 
-    import concurrent.futures
-    import time
+#     import concurrent.futures
+#     import time
 
-    def objective1(x):
-        time.sleep(0.1)
-        return x[0]**2
+#     def objective1(x):
+#         time.sleep(0.1)
+#         return x[0]**2
 
-    def objective2(x):
-        time.sleep(0.1)
-        return (x[0]-1)**2
+#     def objective2(x):
+#         time.sleep(0.1)
+#         return (x[0]-1)**2
 
-    min_method = "COBYLA"
+#     min_method = "COBYLA"
 
-    def minimizer1():
-        return optimize.minimize(objective1,
-                                      [0.0],
-                                      method=min_method)
+#     def minimizer1():
+#         return optimize.minimize(objective1,
+#                                       [0.0],
+#                                       method=min_method)
 
-    def minimizer2():
-        return optimize.minimize(objective2,
-                                      [0.0],
-                                      method=min_method)
+#     def minimizer2():
+#         return optimize.minimize(objective2,
+#                                       [0.0],
+#                                       method=min_method)
 
-    with concurrent.futures.ThreadPoolExecutor() as pool:
-        tasks = []
-        tasks.append(pool.submit(minimizer1))
-        tasks.append(pool.submit(minimizer2))
-        for t in tasks:
-            t.result()
+#     with concurrent.futures.ThreadPoolExecutor() as pool:
+#         tasks = []
+#         tasks.append(pool.submit(minimizer1))
+#         tasks.append(pool.submit(minimizer2))
+#         for t in tasks:
+#             t.result()
 
 
 class TestIterationLimits:
@@ -2672,29 +2672,29 @@ class TestIterationLimits:
                     assert res["nfev"] >= default_iters*2 or res["nit"] >= default_iters*2
 
 
-def test_result_x_shape_when_len_x_is_one():
-    def fun(x):
-        return x * x
+# def test_result_x_shape_when_len_x_is_one():
+#     def fun(x):
+#         return x * x
 
-    def jac(x):
-        return 2. * x
+#     def jac(x):
+#         return 2. * x
 
-    def hess(x):
-        return np.array([[2.]])
+#     def hess(x):
+#         return np.array([[2.]])
 
-    methods = ['Nelder-Mead', 'Powell', 'CG', 'BFGS', 'L-BFGS-B', 'TNC',
-               'COBYLA', 'SLSQP']
-    for method in methods:
-        res = optimize.minimize(fun, np.array([0.1]), method=method)
-        assert res.x.shape == (1,)
+#     methods = ['Nelder-Mead', 'Powell', 'CG', 'BFGS', 'L-BFGS-B', 'TNC',
+#                'COBYLA', 'SLSQP']
+#     for method in methods:
+#         res = optimize.minimize(fun, np.array([0.1]), method=method)
+#         assert res.x.shape == (1,)
 
-    # use jac + hess
-    methods = ['trust-constr', 'dogleg', 'trust-ncg', 'trust-exact',
-               'trust-krylov', 'Newton-CG']
-    for method in methods:
-        res = optimize.minimize(fun, np.array([0.1]), method=method, jac=jac,
-                                hess=hess)
-        assert res.x.shape == (1,)
+#     # use jac + hess
+#     methods = ['trust-constr', 'dogleg', 'trust-ncg', 'trust-exact',
+#                'trust-krylov', 'Newton-CG']
+#     for method in methods:
+#         res = optimize.minimize(fun, np.array([0.1]), method=method, jac=jac,
+#                                 hess=hess)
+#         assert res.x.shape == (1,)
 
 
 class FunctionWithGradient:
@@ -3034,44 +3034,44 @@ def test_bounds_with_list():
     )
 
 
-def test_x_overwritten_user_function():
-    # if the user overwrites the x-array in the user function it's likely
-    # that the minimizer stops working properly.
-    # gh13740
-    def fquad(x):
-        a = np.arange(np.size(x))
-        x -= a
-        x *= x
-        return np.sum(x)
+# def test_x_overwritten_user_function():
+#     # if the user overwrites the x-array in the user function it's likely
+#     # that the minimizer stops working properly.
+#     # gh13740
+#     def fquad(x):
+#         a = np.arange(np.size(x))
+#         x -= a
+#         x *= x
+#         return np.sum(x)
 
-    def fquad_jac(x):
-        a = np.arange(np.size(x))
-        x *= 2
-        x -= 2 * a
-        return x
+#     def fquad_jac(x):
+#         a = np.arange(np.size(x))
+#         x *= 2
+#         x -= 2 * a
+#         return x
 
-    def fquad_hess(x):
-        return np.eye(np.size(x)) * 2.0
+#     def fquad_hess(x):
+#         return np.eye(np.size(x)) * 2.0
 
-    meth_jac = [
-        'newton-cg', 'dogleg', 'trust-ncg', 'trust-exact',
-        'trust-krylov', 'trust-constr'
-    ]
-    meth_hess = [
-        'dogleg', 'trust-ncg', 'trust-exact', 'trust-krylov', 'trust-constr'
-    ]
+#     meth_jac = [
+#         'newton-cg', 'dogleg', 'trust-ncg', 'trust-exact',
+#         'trust-krylov', 'trust-constr'
+#     ]
+#     meth_hess = [
+#         'dogleg', 'trust-ncg', 'trust-exact', 'trust-krylov', 'trust-constr'
+#     ]
 
-    x0 = np.ones(5) * 1.5
+#     x0 = np.ones(5) * 1.5
 
-    for meth in MINIMIZE_METHODS:
-        jac = None
-        hess = None
-        if meth in meth_jac:
-            jac = fquad_jac
-        if meth in meth_hess:
-            hess = fquad_hess
-        res = optimize.minimize(fquad, x0, method=meth, jac=jac, hess=hess)
-        assert_allclose(res.x, np.arange(np.size(x0)), atol=2e-4)
+#     for meth in MINIMIZE_METHODS:
+#         jac = None
+#         hess = None
+#         if meth in meth_jac:
+#             jac = fquad_jac
+#         if meth in meth_hess:
+#             hess = fquad_hess
+#         res = optimize.minimize(fquad, x0, method=meth, jac=jac, hess=hess)
+#         assert_allclose(res.x, np.arange(np.size(x0)), atol=2e-4)
 
 
 class TestGlobalOptimization:

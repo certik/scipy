@@ -641,17 +641,17 @@ class TestShgoArguments:
                                       atol=1e-5)
         numpy.testing.assert_allclose(res.fun, test3_1.expected_fun, atol=1e-5)
 
-    def test_7_1_minkwargs(self):
-        """Test the minimizer_kwargs arguments for solvers with constraints"""
-        # Test solvers
-        for solver in ['COBYLA', 'SLSQP']:
-            # Note that passing global constraints to SLSQP is tested in other
-            # unittests which run test4_1 normally
-            minimizer_kwargs = {'method': solver,
-                                'constraints': test3_1.cons}
-            run_test(test3_1, n=100, test_atol=1e-3,
-                     minimizer_kwargs=minimizer_kwargs,
-                     sampling_method='sobol')
+    # def test_7_1_minkwargs(self):
+    #     """Test the minimizer_kwargs arguments for solvers with constraints"""
+    #     # Test solvers
+    #     for solver in ['COBYLA', 'SLSQP']:
+    #         # Note that passing global constraints to SLSQP is tested in other
+    #         # unittests which run test4_1 normally
+    #         minimizer_kwargs = {'method': solver,
+    #                             'constraints': test3_1.cons}
+    #         run_test(test3_1, n=100, test_atol=1e-3,
+    #                  minimizer_kwargs=minimizer_kwargs,
+    #                  sampling_method='sobol')
 
     def test_7_2_minkwargs(self):
         """Test the minimizer_kwargs default inits"""

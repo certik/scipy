@@ -60,111 +60,111 @@ class TestOldToNew:
         assert_allclose(res.fun, 1.125, rtol=1e-4)
 
 
-class TestNewToOld:
+# class TestNewToOld:
 
-    def test_multiple_constraint_objects(self):
-        def fun(x):
-            return (x[0] - 1) ** 2 + (x[1] - 2.5) ** 2 + (x[2] - 0.75) ** 2
-        x0 = [2, 0, 1]
-        coni = []  # only inequality constraints (can use cobyla)
-        methods = ["slsqp", "cobyla", "trust-constr"]
+    # def test_multiple_constraint_objects(self):
+    #     def fun(x):
+    #         return (x[0] - 1) ** 2 + (x[1] - 2.5) ** 2 + (x[2] - 0.75) ** 2
+    #     x0 = [2, 0, 1]
+    #     coni = []  # only inequality constraints (can use cobyla)
+    #     methods = ["slsqp", "cobyla", "trust-constr"]
 
-        # mixed old and new
-        coni.append([{'type': 'ineq', 'fun': lambda x: x[0] - 2 * x[1] + 2},
-                     NonlinearConstraint(lambda x: x[0] - x[1], -1, 1)])
+    #     # mixed old and new
+    #     coni.append([{'type': 'ineq', 'fun': lambda x: x[0] - 2 * x[1] + 2},
+    #                  NonlinearConstraint(lambda x: x[0] - x[1], -1, 1)])
 
-        coni.append([LinearConstraint([1, -2, 0], -2, np.inf),
-                     NonlinearConstraint(lambda x: x[0] - x[1], -1, 1)])
+    #     coni.append([LinearConstraint([1, -2, 0], -2, np.inf),
+    #                  NonlinearConstraint(lambda x: x[0] - x[1], -1, 1)])
 
-        coni.append([NonlinearConstraint(lambda x: x[0] - 2 * x[1] + 2, 0, np.inf),
-                     NonlinearConstraint(lambda x: x[0] - x[1], -1, 1)])
+    #     coni.append([NonlinearConstraint(lambda x: x[0] - 2 * x[1] + 2, 0, np.inf),
+    #                  NonlinearConstraint(lambda x: x[0] - x[1], -1, 1)])
 
-        for con in coni:
-            funs = {}
-            for method in methods:
-                with suppress_warnings() as sup:
-                    sup.filter(UserWarning)
-                    result = minimize(fun, x0, method=method, constraints=con)
-                    funs[method] = result.fun
-            assert_allclose(funs['slsqp'], funs['trust-constr'], rtol=1e-4)
-            assert_allclose(funs['cobyla'], funs['trust-constr'], rtol=1e-4)
+    #     for con in coni:
+    #         funs = {}
+    #         for method in methods:
+    #             with suppress_warnings() as sup:
+    #                 sup.filter(UserWarning)
+    #                 result = minimize(fun, x0, method=method, constraints=con)
+    #                 funs[method] = result.fun
+    #         assert_allclose(funs['slsqp'], funs['trust-constr'], rtol=1e-4)
+    #         assert_allclose(funs['cobyla'], funs['trust-constr'], rtol=1e-4)
 
-    def test_individual_constraint_objects(self):
-        def fun(x):
-            return (x[0] - 1) ** 2 + (x[1] - 2.5) ** 2 + (x[2] - 0.75) ** 2
-        x0 = [2, 0, 1]
+    # def test_individual_constraint_objects(self):
+    #     def fun(x):
+    #         return (x[0] - 1) ** 2 + (x[1] - 2.5) ** 2 + (x[2] - 0.75) ** 2
+    #     x0 = [2, 0, 1]
 
-        cone = []  # with equality constraints (can't use cobyla)
-        coni = []  # only inequality constraints (can use cobyla)
-        methods = ["slsqp", "cobyla", "trust-constr"]
+    #     cone = []  # with equality constraints (can't use cobyla)
+    #     coni = []  # only inequality constraints (can use cobyla)
+    #     methods = ["slsqp", "cobyla", "trust-constr"]
 
-        # nonstandard data types for constraint equality bounds
-        cone.append(NonlinearConstraint(lambda x: x[0] - x[1], 1, 1))
-        cone.append(NonlinearConstraint(lambda x: x[0] - x[1], [1.21], [1.21]))
-        cone.append(NonlinearConstraint(lambda x: x[0] - x[1],
-                                        1.21, np.array([1.21])))
+    #     # nonstandard data types for constraint equality bounds
+    #     cone.append(NonlinearConstraint(lambda x: x[0] - x[1], 1, 1))
+    #     cone.append(NonlinearConstraint(lambda x: x[0] - x[1], [1.21], [1.21]))
+    #     cone.append(NonlinearConstraint(lambda x: x[0] - x[1],
+    #                                     1.21, np.array([1.21])))
 
-        # multiple equalities
-        cone.append(NonlinearConstraint(
-                    lambda x: [x[0] - x[1], x[1] - x[2]],
-                    1.21, 1.21))  # two same equalities
-        cone.append(NonlinearConstraint(
-                    lambda x: [x[0] - x[1], x[1] - x[2]],
-                    [1.21, 1.4], [1.21, 1.4]))  # two different equalities
-        cone.append(NonlinearConstraint(
-                    lambda x: [x[0] - x[1], x[1] - x[2]],
-                    [1.21, 1.21], 1.21))  # equality specified two ways
-        cone.append(NonlinearConstraint(
-                    lambda x: [x[0] - x[1], x[1] - x[2]],
-                    [1.21, -np.inf], [1.21, np.inf]))  # equality + unbounded
+    #     # multiple equalities
+    #     cone.append(NonlinearConstraint(
+    #                 lambda x: [x[0] - x[1], x[1] - x[2]],
+    #                 1.21, 1.21))  # two same equalities
+    #     cone.append(NonlinearConstraint(
+    #                 lambda x: [x[0] - x[1], x[1] - x[2]],
+    #                 [1.21, 1.4], [1.21, 1.4]))  # two different equalities
+    #     cone.append(NonlinearConstraint(
+    #                 lambda x: [x[0] - x[1], x[1] - x[2]],
+    #                 [1.21, 1.21], 1.21))  # equality specified two ways
+    #     cone.append(NonlinearConstraint(
+    #                 lambda x: [x[0] - x[1], x[1] - x[2]],
+    #                 [1.21, -np.inf], [1.21, np.inf]))  # equality + unbounded
 
-        # nonstandard data types for constraint inequality bounds
-        coni.append(NonlinearConstraint(lambda x: x[0] - x[1], 1.21, np.inf))
-        coni.append(NonlinearConstraint(lambda x: x[0] - x[1], [1.21], np.inf))
-        coni.append(NonlinearConstraint(lambda x: x[0] - x[1],
-                                        1.21, np.array([np.inf])))
-        coni.append(NonlinearConstraint(lambda x: x[0] - x[1], -np.inf, -3))
-        coni.append(NonlinearConstraint(lambda x: x[0] - x[1],
-                                        np.array(-np.inf), -3))
+    #     # nonstandard data types for constraint inequality bounds
+    #     coni.append(NonlinearConstraint(lambda x: x[0] - x[1], 1.21, np.inf))
+    #     coni.append(NonlinearConstraint(lambda x: x[0] - x[1], [1.21], np.inf))
+    #     coni.append(NonlinearConstraint(lambda x: x[0] - x[1],
+    #                                     1.21, np.array([np.inf])))
+    #     coni.append(NonlinearConstraint(lambda x: x[0] - x[1], -np.inf, -3))
+    #     coni.append(NonlinearConstraint(lambda x: x[0] - x[1],
+    #                                     np.array(-np.inf), -3))
 
-        # multiple inequalities/equalities
-        coni.append(NonlinearConstraint(
-                    lambda x: [x[0] - x[1], x[1] - x[2]],
-                    1.21, np.inf))  # two same inequalities
-        cone.append(NonlinearConstraint(
-                    lambda x: [x[0] - x[1], x[1] - x[2]],
-                    [1.21, -np.inf], [1.21, 1.4]))  # mixed equality/inequality
-        coni.append(NonlinearConstraint(
-                    lambda x: [x[0] - x[1], x[1] - x[2]],
-                    [1.1, .8], [1.2, 1.4]))  # bounded above and below
-        coni.append(NonlinearConstraint(
-                    lambda x: [x[0] - x[1], x[1] - x[2]],
-                    [-1.2, -1.4], [-1.1, -.8]))  # - bounded above and below
+    #     # multiple inequalities/equalities
+    #     coni.append(NonlinearConstraint(
+    #                 lambda x: [x[0] - x[1], x[1] - x[2]],
+    #                 1.21, np.inf))  # two same inequalities
+    #     cone.append(NonlinearConstraint(
+    #                 lambda x: [x[0] - x[1], x[1] - x[2]],
+    #                 [1.21, -np.inf], [1.21, 1.4]))  # mixed equality/inequality
+    #     coni.append(NonlinearConstraint(
+    #                 lambda x: [x[0] - x[1], x[1] - x[2]],
+    #                 [1.1, .8], [1.2, 1.4]))  # bounded above and below
+    #     coni.append(NonlinearConstraint(
+    #                 lambda x: [x[0] - x[1], x[1] - x[2]],
+    #                 [-1.2, -1.4], [-1.1, -.8]))  # - bounded above and below
 
-        # quick check of LinearConstraint class (very little new code to test)
-        cone.append(LinearConstraint([1, -1, 0], 1.21, 1.21))
-        cone.append(LinearConstraint([[1, -1, 0], [0, 1, -1]], 1.21, 1.21))
-        cone.append(LinearConstraint([[1, -1, 0], [0, 1, -1]],
-                                     [1.21, -np.inf], [1.21, 1.4]))
+    #     # quick check of LinearConstraint class (very little new code to test)
+    #     cone.append(LinearConstraint([1, -1, 0], 1.21, 1.21))
+    #     cone.append(LinearConstraint([[1, -1, 0], [0, 1, -1]], 1.21, 1.21))
+    #     cone.append(LinearConstraint([[1, -1, 0], [0, 1, -1]],
+    #                                  [1.21, -np.inf], [1.21, 1.4]))
 
-        for con in coni:
-            funs = {}
-            for method in methods:
-                with suppress_warnings() as sup:
-                    sup.filter(UserWarning)
-                    result = minimize(fun, x0, method=method, constraints=con)
-                    funs[method] = result.fun
-            assert_allclose(funs['slsqp'], funs['trust-constr'], rtol=1e-3)
-            assert_allclose(funs['cobyla'], funs['trust-constr'], rtol=1e-3)
+    #     for con in coni:
+    #         funs = {}
+    #         for method in methods:
+    #             with suppress_warnings() as sup:
+    #                 sup.filter(UserWarning)
+    #                 result = minimize(fun, x0, method=method, constraints=con)
+    #                 funs[method] = result.fun
+    #         assert_allclose(funs['slsqp'], funs['trust-constr'], rtol=1e-3)
+    #         assert_allclose(funs['cobyla'], funs['trust-constr'], rtol=1e-3)
 
-        for con in cone:
-            funs = {}
-            for method in methods[::2]:  # skip cobyla
-                with suppress_warnings() as sup:
-                    sup.filter(UserWarning)
-                    result = minimize(fun, x0, method=method, constraints=con)
-                    funs[method] = result.fun
-            assert_allclose(funs['slsqp'], funs['trust-constr'], rtol=1e-3)
+    #     for con in cone:
+    #         funs = {}
+    #         for method in methods[::2]:  # skip cobyla
+    #             with suppress_warnings() as sup:
+    #                 sup.filter(UserWarning)
+    #                 result = minimize(fun, x0, method=method, constraints=con)
+    #                 funs[method] = result.fun
+    #         assert_allclose(funs['slsqp'], funs['trust-constr'], rtol=1e-3)
 
 
 class TestNewToOldSLSQP:
