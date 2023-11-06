@@ -284,6 +284,49 @@ SET(SOURCE_FILES_MACH_INTEGRATE_RTLIB
     "../scipy/integrate/mach/d1mach.f"
 )
 
+SET(SOURCE_FILES_QUADPACK
+    "../scipy/integrate/quadpack/dqag.f"
+    "../scipy/integrate/quadpack/dqage.f"
+    "../scipy/integrate/quadpack/dqagi.f"
+    "../scipy/integrate/quadpack/dqagie.f"
+    "../scipy/integrate/quadpack/dqagp.f"
+    "../scipy/integrate/quadpack/dqagpe.f"
+    "../scipy/integrate/quadpack/dqags.f"
+    "../scipy/integrate/quadpack/dqagse.f"
+    "../scipy/integrate/quadpack/dqawc.f"
+    "../scipy/integrate/quadpack/dqawce.f"
+    "../scipy/integrate/quadpack/dqawf.f"
+    "../scipy/integrate/quadpack/dqawfe.f"
+    "../scipy/integrate/quadpack/dqawo.f"
+    "../scipy/integrate/quadpack/dqawoe.f"
+    "../scipy/integrate/quadpack/dqaws.f"
+    "../scipy/integrate/quadpack/dqawse.f"
+    "../scipy/integrate/quadpack/dqc25c.f"
+    "../scipy/integrate/quadpack/dqc25f.f"
+    "../scipy/integrate/quadpack/dqc25s.f"
+    "../scipy/integrate/quadpack/dqcheb.f"
+    "../scipy/integrate/quadpack/dqelg.f"
+    "../scipy/integrate/quadpack/dqk15.f"
+    "../scipy/integrate/quadpack/dqk15i.f"
+    "../scipy/integrate/quadpack/dqk15w.f"
+    "../scipy/integrate/quadpack/dqk21.f"
+    "../scipy/integrate/quadpack/dqk31.f"
+    "../scipy/integrate/quadpack/dqk41.f"
+    "../scipy/integrate/quadpack/dqk51.f"
+    "../scipy/integrate/quadpack/dqk61.f"
+    "../scipy/integrate/quadpack/dqmomo.f"
+    "../scipy/integrate/quadpack/dqng.f"
+    "../scipy/integrate/quadpack/dqpsrt.f"
+    "../scipy/integrate/quadpack/dqwgtc.f"
+    "../scipy/integrate/quadpack/dqwgtf.f"
+    "../scipy/integrate/quadpack/dqwgts.f"
+    "../scipy/integrate/mach/d1mach.f"
+    "../scipy/integrate/mach/xerror.f"
+)
+
+SET(SOURCE_FILES_QUADPACK_RTLIB
+    "../scipy/integrate/quadpack/dqwgts.f"
+)
 
 foreach(SRC ${SOURCE_FILES_MINPACK})
     set_source_files_properties(${SRC} PROPERTIES
@@ -355,6 +398,15 @@ list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
 set_source_files_properties(${SOURCE_FILES_MACH_INTEGRATE_RTLIB} PROPERTIES
     COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
 
+foreach(SRC ${SOURCE_FILES_QUADPACK})
+    set_source_files_properties(${SRC} PROPERTIES
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+endforeach()
+
+get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_QUADPACK_RTLIB} COMPILE_OPTIONS)
+list(APPEND SOURCE_COMPILE_OPTIONS --rtlib)
+set_source_files_properties(${SOURCE_FILES_QUADPACK_RTLIB} PROPERTIES
+    COMPILE_OPTIONS "${SOURCE_COMPILE_OPTIONS}")
 
 # Create shared libraries for each component (Minpack, Fitpack, Specfun)
 add_library(minpack SHARED ${SOURCE_FILES_MINPACK})
@@ -381,6 +433,9 @@ set_target_properties(minpack2 PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 add_library(mach_integrate SHARED ${SOURCE_FILES_MACH_INTEGRATE})
 set_target_properties(mach_integrate PROPERTIES POSITION_INDEPENDENT_CODE OFF)
 
+add_library(quadpack SHARED ${SOURCE_FILES_QUADPACK})
+set_target_properties(quadpack PROPERTIES POSITION_INDEPENDENT_CODE OFF)
+
 # Link the libraries
 message("${LFORTRAN_RUNTIME_LIBRARY_PATH}")
 find_library(LFORTRAN_RUNTIME_LIBRARY lfortran_runtime PATH "${LFORTRAN_RUNTIME_LIBRARY_PATH}")
@@ -395,10 +450,9 @@ target_link_libraries(mach PRIVATE lfortran_runtime)
 target_link_libraries(cdflib PRIVATE lfortran_runtime)
 target_link_libraries(minpack2 PRIVATE lfortran_runtime)
 target_link_libraries(mach_integrate PRIVATE lfortran_runtime)
-
-
+target_link_libraries(quadpack PRIVATE lfortran_runtime lapack)
 # Set C as the link language
-set_target_properties(minpack specfun fitpack amos mach cdflib minpack2 mach_integrate PROPERTIES LINKER_LANGUAGE C)
+set_target_properties(minpack specfun fitpack amos mach cdflib minpack2 mach_integrate quadpack PROPERTIES LINKER_LANGUAGE C)
 
 # Rename the shared library to have a .so extension
 set_target_properties(minpack PROPERTIES OUTPUT_NAME minpack SUFFIX ".so")
@@ -409,7 +463,7 @@ set_target_properties(mach PROPERTIES OUTPUT_NAME mach SUFFIX ".so")
 set_target_properties(cdflib PROPERTIES OUTPUT_NAME cdflib SUFFIX ".so")
 set_target_properties(minpack2 PROPERTIES OUTPUT_NAME minpack2 SUFFIX ".so")
 set_target_properties(mach_integrate PROPERTIES OUTPUT_NAME mach_integrate SUFFIX ".so")
-
+set_target_properties(quadpack PROPERTIES OUTPUT_NAME quadpack SUFFIX ".so")
 
 # Specify installation paths
 install(TARGETS minpack DESTINATION ${MINPACK_DIRECTORY})
@@ -435,3 +489,6 @@ install(TARGETS minpack2 DESTINATION $ENV{CONDA_PREFIX}/lib)
 
 install(TARGETS mach_integrate DESTINATION ${INTEGRATE_DIRECTORY})
 install(TARGETS mach_integrate DESTINATION $ENV{CONDA_PREFIX}/lib)
+
+install(TARGETS quadpack DESTINATION ${INTEGRATE_DIRECTORY})
+install(TARGETS quadpack DESTINATION $ENV{CONDA_PREFIX}/lib)
