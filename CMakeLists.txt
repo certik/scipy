@@ -330,7 +330,7 @@ SET(SOURCE_FILES_QUADPACK_RTLIB
 
 foreach(SRC ${SOURCE_FILES_MINPACK})
     set_source_files_properties(${SRC} PROPERTIES
-        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--separate-compilation;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
 endforeach()
 
 get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_MINPACK_RTLIB} COMPILE_OPTIONS)
@@ -340,12 +340,12 @@ set_source_files_properties(${SOURCE_FILES_MINPACK_RTLIB} PROPERTIES
 
 foreach(SRC ${SOURCE_FILES_SPECFUN})
     set_source_files_properties(${SRC} PROPERTIES
-        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections;--rtlib")
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--separate-compilation;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections;--rtlib")
 endforeach()
 
 foreach(SRC ${SOURCE_FILES_FITPACK})
     set_source_files_properties(${SRC} PROPERTIES
-        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--separate-compilation;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
 endforeach()
 
 get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_FITPACK_RTLIB} COMPILE_OPTIONS)
@@ -355,7 +355,7 @@ set_source_files_properties(${SOURCE_FILES_FITPACK_RTLIB} PROPERTIES
 
 foreach(SRC ${SOURCE_FILES_AMOS})
     set_source_files_properties(${SRC} PROPERTIES
-        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--separate-compilation;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
 endforeach()
 
 get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_AMOS_RTLIB} COMPILE_OPTIONS)
@@ -365,12 +365,12 @@ set_source_files_properties(${SOURCE_FILES_AMOS_RTLIB} PROPERTIES
 
 foreach(SRC ${SOURCE_FILES_MACH})
     set_source_files_properties(${SRC} PROPERTIES
-        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--separate-compilation;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
 endforeach()
 
 foreach(SRC ${SOURCE_FILES_CDFLIB})
     set_source_files_properties(${SRC} PROPERTIES
-        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--separate-compilation;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
 endforeach()
 
 get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_CDFLIB_RTLIB} COMPILE_OPTIONS)
@@ -380,7 +380,7 @@ set_source_files_properties(${SOURCE_FILES_CDFLIB_RTLIB} PROPERTIES
 
 foreach(SRC ${SOURCE_FILES_MINPACK2})
     set_source_files_properties(${SRC} PROPERTIES
-        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--separate-compilation;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
 endforeach()
 
 get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_MINPACK2_RTLIB} COMPILE_OPTIONS)
@@ -390,7 +390,7 @@ set_source_files_properties(${SOURCE_FILES_MINPACK2_RTLIB} PROPERTIES
 
     foreach(SRC ${SOURCE_FILES_MACH_INTEGRATE})
     set_source_files_properties(${SRC} PROPERTIES
-        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--separate-compilation;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
 endforeach()
 
 get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_MACH_INTEGRATE_RTLIB} COMPILE_OPTIONS)
@@ -400,7 +400,7 @@ set_source_files_properties(${SOURCE_FILES_MACH_INTEGRATE_RTLIB} PROPERTIES
 
 foreach(SRC ${SOURCE_FILES_QUADPACK})
     set_source_files_properties(${SRC} PROPERTIES
-        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--generate-object-code;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
+        COMPILE_OPTIONS "--fixed-form;--implicit-typing;--implicit-interface;--separate-compilation;--use-loop-variable-after-loop;--all-mangling;--mangle-underscore;--bindc-mangling;--legacy-array-sections")
 endforeach()
 
 get_source_file_property(SOURCE_COMPILE_OPTIONS ${SOURCE_FILES_QUADPACK_RTLIB} COMPILE_OPTIONS)
